@@ -1,20 +1,13 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# MELENT CARE — Exhibition Booth Project
 
-# Run and deploy your AI Studio app
+This repository is prepared as the digital handover workspace for the **MELENT CARE** exhibition booth project.
 
-This contains everything you need to run your app locally.
+## Project Scope
 
-View your app in AI Studio: https://ai.studio/apps/c8019b3b-8368-46ae-996a-5c6036f42c78
+The project covers the final design and execution documentation for an L-shaped exhibition booth.
 
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+- Booth layout: L-shape
+- Main wall: 5.00 m width × 2.40 m height
+- Side wall: 3.00 m width × 2.40 m height
+- Main wall display cabinets: 4 cabinets
+- Side wall display cabinets
