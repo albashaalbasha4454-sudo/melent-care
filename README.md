@@ -1,26 +1,44 @@
 # MELENT CARE
 
-Professional website interface for MELENT CARE.
+Professional web application for MELENT CARE.
 
-This repository is dedicated to the company website interface only. It is not related to the exhibition booth, carpentry drawings, printing files, or booth execution package.
+This repository is dedicated to the company website / application interface only. It is not related to the exhibition booth, carpentry drawings, printing files, or booth execution package.
 
-## Project Files
+## Tech Stack
 
-- `index.html` — Main website page.
-- `style.css` — Main styling file.
-- `script.js` — Basic interface interactions.
-- `assets/logo.svg` — MELENT CARE logo in SVG format.
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
 
-## Website Concept
+## Local Development
 
-A clean corporate interface for a healthcare company focused on medical tourism, care coordination, health services, and international medical partnerships.
+```bash
+npm install
+npm run dev
+```
 
-## Local Preview
+## Production Build
 
-Open `index.html` directly in the browser.
+```bash
+npm install
+npm run build
+```
 
-## GitHub Pages Deployment
+The production output folder is:
 
-Go to:
+```txt
+dist
+```
 
-Settings → Pages → Deploy from branch → `main` → `/root`
+## Deployment Settings
+
+Use the following settings on Vercel, Netlify, or any static hosting platform:
+
+- Framework: Vite
+- Install Command: npm install
+- Build Command: npm run build
+- Output Directory: dist
+- Node Version: 20
+
+Do not use Webpack for this project. If the platform asks to install `webpack-cli`, the build command is incorrect and must be changed to `npm run build`.
