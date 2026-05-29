@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-navy: #00234b; /* Navy Blue */
+  --color-brand-green: #00d084; /* Medical Green */
+  --color-brand-cyan: #00c4cc; /* Cyan */
+  --color-brand-lime: #84cc16; /* Lime */
+  --color-brand-gold: #d4af37; /* Gold Accent */
+  --color-bg-matte: #fcfcfc; /* Matte White */
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-bg-matte)] text-slate-900 antialiased;
+    font-family: var(--font-sans);
+  }
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.medical-card {
+  @apply bg-white border border-slate-200/60 rounded-[2rem] shadow-sm transition-all duration-300;
+}
+
+.medical-card:hover {
+  @apply shadow-xl shadow-slate-200/50 border-slate-300/40 -translate-y-1;
+}
+
+.nav-gradient {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+}
+
+.glass-header {
+  @apply sticky top-0 z-40 bg-white/70 backdrop-blur-xl border-b border-white/20;
+}
+
+/* Custom scrollbar for a cleaner look */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300;
+}

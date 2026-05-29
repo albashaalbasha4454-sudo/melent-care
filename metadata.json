@@ -1,0 +1,8 @@
+{
+  "name": "Melent Care - نظام إدارة الخدمات الطبية",
+  "description": "منصة شاملة لإدارة التجارة الطبية، السياحة العلاجية، وتوريد المعدات الصحية لشركة ميلينت كير",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
