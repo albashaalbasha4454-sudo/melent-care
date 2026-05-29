@@ -1,13 +1,26 @@
-# MELENT CARE — Exhibition Booth Project
+# MELENT CARE
 
-This repository is prepared as the digital handover workspace for the **MELENT CARE** exhibition booth project.
+Professional website interface for MELENT CARE.
 
-## Project Scope
+This repository is dedicated to the company website interface only. It is not related to the exhibition booth, carpentry drawings, printing files, or booth execution package.
 
-The project covers the final design and execution documentation for an L-shaped exhibition booth.
+## Project Files
 
-- Booth layout: L-shape
-- Main wall: 5.00 m width × 2.40 m height
-- Side wall: 3.00 m width × 2.40 m height
-- Main wall display cabinets: 4 cabinets
-- Side wall display cabinets
+- `index.html` — Main website page.
+- `style.css` — Main styling file.
+- `script.js` — Basic interface interactions.
+- `assets/logo.svg` — MELENT CARE logo in SVG format.
+
+## Website Concept
+
+A clean corporate interface for a healthcare company focused on medical tourism, care coordination, health services, and international medical partnerships.
+
+## Local Preview
+
+Open `index.html` directly in the browser.
+
+## GitHub Pages Deployment
+
+Go to:
+
+Settings → Pages → Deploy from branch → `main` → `/root`
