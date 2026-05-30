@@ -97,7 +97,7 @@ export const DoctorSection: React.FC = () => {
               const name = prompt('أدخل اسم الطبيب الجديد:');
               if (name) {
                 const newDoc: Doctor = {
-                  id: 'doc' + Date.now(),
+                  id: 'doc' + Date.now() + Math.random().toString(36).substring(2, 9),
                   name,
                   specialty: 'استشاري JCI',
                   experienceYears: 10,

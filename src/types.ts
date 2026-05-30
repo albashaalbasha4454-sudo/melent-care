@@ -245,8 +245,10 @@ export interface Product {
   id: string;
   name: string;
   category: string;
-  price: number;
+  price: number; // Selling Price
+  purchasePrice?: number; // Internal Cost
   stock: number;
+  isBookable?: boolean;
 }
 
 export interface MedicalOrder {

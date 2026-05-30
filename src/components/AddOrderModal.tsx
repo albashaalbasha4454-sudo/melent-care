@@ -237,7 +237,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                 {orderToEdit ? 'تعديل بيانات العقد' : 'إنشاء عقد توريد جديد'}
               </h3>
               <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">
-                {orderToEdit ? 'Edit Supply Chain Agreement' : 'Detailed Commercial Supply Agreement'}
+                {orderToEdit ? 'تعديل اتفاقية التوريد' : 'اتفاقية توريد تجارية مفصلة'}
               </p>
             </div>
           </div>
@@ -301,29 +301,29 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">الاسم الثلاثي بالكامل</label>
-                      <input type="text" value={formData.clientName} onChange={e => setFormData({...formData, clientName: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الاسم كما في الهوية أو السجل" />
+                      <input type="text" value={formData.clientName || ''} onChange={e => setFormData({...formData, clientName: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الاسم كما في الهوية أو السجل" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">نوع العميل</label>
-                      <select value={formData.clientType} onChange={e => setFormData({...formData, clientType: e.target.value as ClientType})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm">
-                        <option value="Individual">فرد (Individual)</option>
-                        <option value="Company">شركة (Company)</option>
-                        <option value="Hospital">مستشفى / مركز طبي (Hospital)</option>
-                        <option value="Distributor">موزع (Distributor)</option>
-                        <option value="Supplier">مورد (Supplier)</option>
+                      <select value={formData.clientType || 'Individual'} onChange={e => setFormData({...formData, clientType: e.target.value as ClientType})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm">
+                        <option value="Individual">فرد</option>
+                        <option value="Company">شركة</option>
+                        <option value="Hospital">مستشفى / مركز طبي</option>
+                        <option value="Distributor">موزع</option>
+                        <option value="Supplier">مورد</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">رقم الهاتف (مع مفتاح الدولة)</label>
-                      <input type="tel" dir="ltr" value={formData.clientPhone} onChange={e => setFormData({...formData, clientPhone: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm text-left" placeholder="+XXX XXXXXXXX" />
+                      <input type="tel" dir="ltr" value={formData.clientPhone || ''} onChange={e => setFormData({...formData, clientPhone: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm text-left" placeholder="+XXX XXXXXXXX" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">البريد الإلكتروني</label>
-                      <input type="email" dir="ltr" value={formData.clientEmail} onChange={e => setFormData({...formData, clientEmail: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm text-left" placeholder="example@mail.com" />
+                      <input type="email" dir="ltr" value={formData.clientEmail || ''} onChange={e => setFormData({...formData, clientEmail: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm text-left" placeholder="example@mail.com" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">رقم الهوية / السجل التجاري</label>
-                      <input type="text" value={formData.identityNumber} onChange={e => setFormData({...formData, identityNumber: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="National ID / Commercial Reg" />
+                      <input type="text" value={formData.identityNumber || ''} onChange={e => setFormData({...formData, identityNumber: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="رقم السجل التجاري أو الهوية" />
                     </div>
                  </div>
                </section>
@@ -333,15 +333,15 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">الدولة (Country)</label>
-                      <input type="text" value={formData.clientCountry} onChange={e => setFormData({...formData, clientCountry: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="مثلاً: المملكة العربية السعودية" />
+                      <input type="text" value={formData.clientCountry || ''} onChange={e => setFormData({...formData, clientCountry: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="مثلاً: المملكة العربية السعودية" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">المدينة (City)</label>
-                      <input type="text" value={formData.clientCity} onChange={e => setFormData({...formData, clientCity: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="مثلاً: الرياض" />
+                      <input type="text" value={formData.clientCity || ''} onChange={e => setFormData({...formData, clientCity: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="مثلاً: الرياض" />
                     </div>
                     <div className="lg:col-span-1 space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">العنوان التفصيلي</label>
-                      <input type="text" value={formData.clientAddress} onChange={e => setFormData({...formData, clientAddress: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الحي، الشارع، رقم المبنى" />
+                      <input type="text" value={formData.clientAddress || ''} onChange={e => setFormData({...formData, clientAddress: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الحي، الشارع، رقم المبنى" />
                     </div>
                  </div>
                </section>
@@ -370,7 +370,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                           <div className="relative">
                             <input 
                               type="text" 
-                              value={item.name} 
+                              value={item.name || ''} 
                               onChange={e => updateItem(idx, 'name', e.target.value)} 
                               className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent focus:border-brand-navy/10" 
                               placeholder="ابحث أو اختر المنتج" 
@@ -391,22 +391,22 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                         </div>
                         <div className="md:col-span-2 space-y-1.5">
                           <label className="text-[9px] font-black uppercase text-slate-400 tracking-widest mr-2">التصنيف</label>
-                          <input type="text" value={item.category} onChange={e => updateItem(idx, 'category', e.target.value)} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent focus:border-brand-navy/10" placeholder="معدات طبية" />
+                          <input type="text" value={item.category || ''} onChange={e => updateItem(idx, 'category', e.target.value)} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent focus:border-brand-navy/10" placeholder="معدات طبية" />
                         </div>
                         <div className="md:col-span-1 space-y-1.5">
                           <label className="text-[9px] font-black uppercase text-slate-400 tracking-widest mr-2">الكمية</label>
-                          <input type="number" value={item.quantity} onChange={e => updateItem(idx, 'quantity', Number(e.target.value))} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent focus:border-brand-navy/10 text-center" />
+                          <input type="number" value={item.quantity || 0} onChange={e => updateItem(idx, 'quantity', Number(e.target.value))} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent focus:border-brand-navy/10 text-center" />
                         </div>
                         <div className="md:col-span-2 space-y-1.5">
                           <label className="text-[9px] font-black uppercase text-slate-400 tracking-widest mr-2">سعر الوحدة ($)</label>
-                          <input type="number" value={item.unitPrice} onChange={e => updateItem(idx, 'unitPrice', Number(e.target.value))} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent focus:border-brand-navy/10" />
+                          <input type="number" value={item.unitPrice || 0} onChange={e => updateItem(idx, 'unitPrice', Number(e.target.value))} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent focus:border-brand-navy/10" />
                         </div>
                         <div className="md:col-span-2 space-y-1.5">
                           <label className="text-[9px] font-black uppercase text-slate-400 tracking-widest mr-2">حالة التوفر</label>
-                          <select value={item.availability} onChange={e => updateItem(idx, 'availability', e.target.value)} className="w-full bg-white rounded-xl p-3 text-xs font-bold border-transparent focus:border-brand-navy/10">
-                            <option value="Available">متوفر (In Stock)</option>
-                            <option value="Needs Order">تحت الطلب (Order Required)</option>
-                            <option value="Out of Stock">غير متوفر (Sold Out)</option>
+                          <select value={item.availability || 'Available'} onChange={e => updateItem(idx, 'availability', e.target.value)} className="w-full bg-white rounded-xl p-3 text-xs font-bold border-transparent focus:border-brand-navy/10">
+                            <option value="Available">متوفر</option>
+                            <option value="Needs Order">تحت الطلب</option>
+                            <option value="Out of Stock">غير متوفر</option>
                           </select>
                         </div>
                         <div className="md:col-span-2 flex items-center justify-between">
@@ -435,27 +435,27 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
           {currentStep === 3 && (
             <div className="space-y-10 animate-in slide-in-from-right duration-500">
                <section>
-                 <h4 className="text-[10px] font-black uppercase text-brand-cyan tracking-[0.3em] border-b border-slate-100 pb-3 mb-6">إعدادات الشحن والتسلم (Shipment Rules)</h4>
+                 <h4 className="text-[10px] font-black uppercase text-brand-cyan tracking-[0.3em] border-b border-slate-100 pb-3 mb-6">إعدادات الشحن والتسلم (قواعد الشحن)</h4>
                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">طريقة التسليم / الشحن</label>
                       <select value={formData.shipping?.method} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, method: e.target.value as DeliveryMethod}})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-cyan/20 transition-all font-bold text-sm">
-                        <option value="Office Pickup">استلام من المكتب / المستودع (Pickup)</option>
-                        <option value="Local Turkey">توصيل محلي داخل تركيا (Turkey Local)</option>
-                        <option value="Internal Client Country">شحن داخلي داخل دولة العميل (In-Country)</option>
-                        <option value="International Shipping">شحن دولي (International)</option>
-                        <option value="Air Freight">شحن جوي (Air Freight)</option>
-                        <option value="Sea Freight">شحن بحري (Sea Freight)</option>
-                        <option value="Express Shipping">شحن سريع (Express)</option>
-                        <option value="Customer Arranged">ترتيب من قبل العميل (By Customer)</option>
+                        <option value="Office Pickup">استلام من المكتب / المستودع</option>
+                        <option value="Local Turkey">توصيل محلي داخل تركيا</option>
+                        <option value="Internal Client Country">شحن داخلي داخل دولة العميل</option>
+                        <option value="International Shipping">شحن دولي</option>
+                        <option value="Air Freight">شحن جوي</option>
+                        <option value="Sea Freight">شحن بحري</option>
+                        <option value="Express Shipping">شحن سريع</option>
+                        <option value="Customer Arranged">ترتيب من قبل العميل</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-[10px] font-black uppercase text-slate-400 mr-2">مكان تنفيذ الطلب</label>
                       <select value={formData.executionLocation} onChange={e => setFormData({...formData, executionLocation: e.target.value as any})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-cyan/20 transition-all font-bold text-sm">
-                        <option value="Turkey">داخل تركيا (Within Turkey)</option>
-                        <option value="International">خارج تركيا (Outside Turkey)</option>
-                        <option value="Multi-location">دولي / متعدد (Multi-location)</option>
+                        <option value="Turkey">داخل تركيا</option>
+                        <option value="International">خارج تركيا</option>
+                        <option value="Multi-location">دولي / متعدد</option>
                       </select>
                     </div>
                     <div className="space-y-1.5">
@@ -480,19 +480,19 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">دولة الوجهة</label>
-                        <input type="text" value={formData.shipping?.destinationCountry} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, destinationCountry: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="Destination Country" />
+                        <input type="text" value={formData.shipping?.destinationCountry || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, destinationCountry: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="دولة التسليم" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">المدينة</label>
-                        <input type="text" value={formData.shipping?.destinationCity} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, destinationCity: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="Destination City" />
+                        <input type="text" value={formData.shipping?.destinationCity || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, destinationCity: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="مدينة التسليم" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">شركة الشحن</label>
-                        <input type="text" value={formData.shipping?.carrier} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, carrier: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="Shipping Carrier" />
+                        <input type="text" value={formData.shipping?.carrier || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, carrier: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="اسم شركة الشحن" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">رقم التتبع (إن وجد)</label>
-                        <input type="text" dir="ltr" value={formData.shipping?.trackingNumber} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, trackingNumber: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent text-left" placeholder="Tracking ID" />
+                        <input type="text" dir="ltr" value={formData.shipping?.trackingNumber || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, trackingNumber: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent text-left" placeholder="رقم الشحنة الدولي" />
                       </div>
                     </div>
                   </section>
@@ -505,15 +505,15 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">أجور التوصيل المحلي</label>
-                        <input type="number" value={formData.financials?.localDeliveryFee} onChange={e => setFormData({...formData, financials: {...formData.financials!, localDeliveryFee: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent" />
+                        <input type="number" value={formData.financials?.localDeliveryFee || 0} onChange={e => setFormData({...formData, financials: {...formData.financials!, localDeliveryFee: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-3 text-sm font-black border-transparent" />
                       </div>
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">شركة التوصيل المحلي</label>
-                        <input type="text" value={formData.shipping?.localCarrier} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, localCarrier: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="Local Courier" />
+                        <input type="text" value={formData.shipping?.localCarrier || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, localCarrier: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" placeholder="اسم شركة التوصيل" />
                       </div>
                       <div className="col-span-2 space-y-1.5">
                         <label className="text-[9px] font-black uppercase text-slate-400 mr-2">تاريخ التسليم المتوقع</label>
-                        <input type="date" value={formData.shipping?.expectedDeliveryDate} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, expectedDeliveryDate: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" />
+                        <input type="date" value={formData.shipping?.expectedDeliveryDate || ''} onChange={e => setFormData({...formData, shipping: {...formData.shipping!, expectedDeliveryDate: e.target.value}})} className="w-full bg-white rounded-xl p-3 text-sm font-bold border-transparent" />
                       </div>
                     </div>
                   </section>
@@ -530,13 +530,13 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-1.5 col-span-2">
                            <select value={formData.payment?.method} onChange={e => setFormData({...formData, payment: {...formData.payment!, method: e.target.value as PaymentMethod}})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-gold/20 transition-all font-bold text-sm">
-                             <option value="Bank Transfer">تحويل بنكي (Bank Transfer)</option>
-                             <option value="International Wire">حوالة دولية (International Wire)</option>
-                             <option value="Cash">دفع نقدي (Cash)</option>
-                             <option value="Credit Card">بطاقة ائتمانية (Credit Card)</option>
-                             <option value="Downpayment + Delivery">دفعة مقدمة + تسليم (Partial)</option>
-                             <option value="Cash on Delivery">الدفع عند الاستلام (COD)</option>
-                             <option value="Other">أخرى (Other)</option>
+                             <option value="Bank Transfer">تحويل بنكي</option>
+                             <option value="International Wire">حوالة دولية</option>
+                             <option value="Cash">دفع نقدي</option>
+                             <option value="Credit Card">بطاقة ائتمانية</option>
+                             <option value="Downpayment + Delivery">دفعة مقدمة + تسليم</option>
+                             <option value="Cash on Delivery">الدفع عند الاستلام</option>
+                             <option value="Other">أخرى</option>
                            </select>
                         </div>
                         <div className="space-y-1.5">
@@ -551,9 +551,9 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                         <div className="space-y-1.5">
                           <label className="text-[10px] font-black uppercase text-slate-400 mr-2">حالة الدفع الأولية</label>
                           <select value={formData.status} onChange={e => setFormData({...formData, status: e.target.value as OrderStatus})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-gold/20 transition-all font-bold text-sm">
-                            <option value="Draft">مسودة (Draft)</option>
-                            <option value="Awaiting Payment">بانتظار الدفع (Pending Payment)</option>
-                            <option value="Paid">تم الدفع (Paid)</option>
+                            <option value="Draft">مسودة</option>
+                            <option value="Awaiting Payment">بانتظار الدفع</option>
+                            <option value="Paid">تم الدفع</option>
                           </select>
                         </div>
                       </div>
@@ -613,7 +613,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                         <div className="flex items-center justify-between">
                            <div>
                              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">المبلغ الإجمالي المستحق</p>
-                             <p className="text-[8px] font-bold text-slate-300 uppercase italic">Final Balance To Pay</p>
+                             <p className="text-[8px] font-bold text-slate-300 uppercase italic">الرصيد النهائي للتسديد</p>
                            </div>
                            <div className="text-left">
                              <span className="text-4xl font-black text-brand-navy">
@@ -631,42 +631,42 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
             <div className="space-y-10 animate-in fade-in duration-500">
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                   <section className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-brand-green tracking-[0.3em] border-b border-slate-100 pb-3">ملاحظات العقد (Contract Notes)</h4>
+                    <h4 className="text-[10px] font-black uppercase text-brand-green tracking-[0.3em] border-b border-slate-100 pb-3">ملاحظات العقد</h4>
                     <div className="space-y-5">
-                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-black uppercase text-slate-400 mr-2">ملاحظات تظهر للعميل في العقد</label>
-                         <textarea value={formData.notes?.external} onChange={e => setFormData({...formData, notes: {...formData.notes!, external: e.target.value}})} className="w-full bg-slate-50 rounded-2xl p-4 text-sm font-bold min-h-[120px]" placeholder="مثلاً: يرجى التوصيل بعد الساعة ٤ عصراً" />
-                       </div>
-                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-black uppercase text-slate-400 mr-2">ملاحظات إدارية داخلية (Internal)</label>
-                         <textarea value={formData.notes?.internal} onChange={e => setFormData({...formData, notes: {...formData.notes!, internal: e.target.value}})} className="w-full bg-brand-navy/5 rounded-2xl p-4 text-sm font-bold min-h-[120px]" placeholder="ملاحظات سرية للفريق فقط" />
-                       </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black uppercase text-slate-400 mr-2">ملاحظات تظهر للعميل في العقد</label>
+                          <textarea value={formData.notes?.external || ''} onChange={e => setFormData({...formData, notes: {...formData.notes!, external: e.target.value}})} className="w-full bg-slate-50 rounded-2xl p-4 text-sm font-bold min-h-[120px]" placeholder="مثلاً: يرجى التوصيل بعد الساعة ٤ عصراً" />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black uppercase text-slate-400 mr-2">ملاحظات إدارية داخلية (Internal)</label>
+                          <textarea value={formData.notes?.internal || ''} onChange={e => setFormData({...formData, notes: {...formData.notes!, internal: e.target.value}})} className="w-full bg-brand-navy/5 rounded-2xl p-4 text-sm font-bold min-h-[120px]" placeholder="ملاحظات سرية للفريق فقط" />
+                        </div>
                     </div>
                   </section>
 
                   <section className="space-y-6">
-                    <h4 className="text-[10px] font-black uppercase text-brand-green tracking-[0.3em] border-b border-slate-100 pb-3">شروط وأحكام (Terms)</h4>
+                    <h4 className="text-[10px] font-black uppercase text-brand-green tracking-[0.3em] border-b border-slate-100 pb-3">شروط وأحكام</h4>
                     <div className="space-y-5">
-                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-black uppercase text-slate-400 mr-2">شروط الدفع والتسليم</label>
-                         <textarea value={formData.notes?.paymentTerms} onChange={e => setFormData({...formData, notes: {...formData.notes!, paymentTerms: e.target.value}})} className="w-full bg-white border-2 border-slate-100 rounded-2xl p-4 text-sm font-medium min-h-[80px]" placeholder="Payment & Delivery Terms" />
-                       </div>
-                       <div className="space-y-1.5">
-                         <label className="text-[10px] font-black uppercase text-slate-400 mr-2">سياسة الإلغاء والاسترجاع</label>
-                         <textarea value={formData.notes?.returnPolicy} onChange={e => setFormData({...formData, notes: {...formData.notes!, returnPolicy: e.target.value}})} className="w-full bg-white border-2 border-slate-100 rounded-2xl p-4 text-sm font-medium min-h-[80px]" placeholder="Cancellation Policy" />
-                       </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black uppercase text-slate-400 mr-2">شروط الدفع والتسليم</label>
+                          <textarea value={formData.notes?.paymentTerms || ''} onChange={e => setFormData({...formData, notes: {...formData.notes!, paymentTerms: e.target.value}})} className="w-full bg-white border-2 border-slate-100 rounded-2xl p-4 text-sm font-medium min-h-[80px]" placeholder="شروط السداد والاستلام" />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="text-[10px] font-black uppercase text-slate-400 mr-2">سياسة الإلغاء والاسترجاع</label>
+                          <textarea value={formData.notes?.returnPolicy || ''} onChange={e => setFormData({...formData, notes: {...formData.notes!, returnPolicy: e.target.value}})} className="w-full bg-white border-2 border-slate-100 rounded-2xl p-4 text-sm font-medium min-h-[80px]" placeholder="سياسة إلغاء الطلب" />
+                        </div>
                     </div>
                   </section>
                </div>
                
                <section>
-                 <h4 className="text-[10px] font-black uppercase text-brand-cyan tracking-[0.3em] border-b border-slate-100 pb-3 mb-6">المرفقات والمستندات (Attachments)</h4>
+                 <h4 className="text-[10px] font-black uppercase text-brand-cyan tracking-[0.3em] border-b border-slate-100 pb-3 mb-6">المرفقات والمستندات</h4>
                  <div className="p-12 border-3 border-dashed border-slate-100 rounded-[3rem] flex flex-col items-center justify-center text-slate-300 bg-slate-50/50">
                     <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-slate-200 shadow-sm mb-4">
                        <Plus size={32} />
                     </div>
-                    <p className="font-black text-brand-navy">اضغط لرفع المستندات (ID, Invoices, Receipts)</p>
-                    <p className="text-[10px] uppercase font-bold mt-2">Maximum file size: 10MB per file</p>
+                    <p className="font-black text-brand-navy">اضغط لرفع المستندات (الهوية، الفواتير، الإيصالات)</p>
+                    <p className="text-[10px] uppercase font-bold mt-2">الحجم الأقصى للملف: ١٠ ميجابايت للملف الواحد</p>
                  </div>
                </section>
             </div>
@@ -676,12 +676,12 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
             <div className="space-y-10 animate-in zoom-in duration-500 max-w-4xl mx-auto">
                <div className="text-center space-y-2 mb-12">
                  <h4 className="text-3xl font-black text-brand-navy">المراجعة النهائية للعقد</h4>
-                 <p className="text-xs text-slate-400 font-bold uppercase tracking-[0.3em]">Final Contract Review</p>
+                 <p className="text-xs text-slate-400 font-bold uppercase tracking-[0.3em]">مراجعة العقد النهائية</p>
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="p-8 bg-slate-50 rounded-[2.5rem] space-y-6">
-                    <h5 className="text-[10px] font-black text-brand-green uppercase tracking-widest leading-none border-b border-slate-200 pb-3">بيانات أساسية (Essentials)</h5>
+                    <h5 className="text-[10px] font-black text-brand-green uppercase tracking-widest leading-none border-b border-slate-200 pb-3">بيانات أساسية</h5>
                     <div className="space-y-4">
                        <div className="flex justify-between">
                          <span className="text-xs font-bold text-slate-400">اسم العميل:</span>
@@ -703,7 +703,7 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                   </div>
 
                   <div className="p-8 bg-slate-50 rounded-[2.5rem] space-y-6">
-                    <h5 className="text-[10px] font-black text-brand-cyan uppercase tracking-widest leading-none border-b border-slate-200 pb-3">اللوجستيات والمالية (Logs & Finance)</h5>
+                    <h5 className="text-[10px] font-black text-brand-cyan uppercase tracking-widest leading-none border-b border-slate-200 pb-3">اللوجستيات والمالية</h5>
                     <div className="space-y-4">
                        <div className="flex justify-between">
                          <span className="text-xs font-bold text-slate-400">طريقة التسليم:</span>

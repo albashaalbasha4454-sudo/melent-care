@@ -5,6 +5,20 @@ import { LocalStorageManager, MELENT_KEYS } from '../../services/localStorageMan
 import { MedicalOrder, Expense, Currency } from '../../types';
 import { mockMedicalOrders, mockExpenses } from '../../data';
 
+const ChartWrapper: React.FC<{ children: React.ReactNode; height: number | string }> = ({ children, height }) => {
+  const [isReady, setIsReady] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div style={{ height, width: '100%', minWidth: 0, overflow: 'hidden' }}>
+      {isReady && children}
+    </div>
+  );
+};
+
 export const ReportsSection: React.FC = () => {
   const [selectedCurrency, setSelectedCurrency] = useState<Currency | 'ALL'>('ALL');
   const [chartData, setChartData] = useState<any[]>([]);
@@ -170,7 +184,7 @@ export const ReportsSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="h-[450px] w-full">
+        <ChartWrapper height={450}>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
               <defs>
@@ -223,7 +237,7 @@ export const ReportsSection: React.FC = () => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
+        </ChartWrapper>
       </div>
 
       {/* Secondary Bar Chart */}
@@ -234,7 +248,7 @@ export const ReportsSection: React.FC = () => {
              حجم العمليات الشهري
            </h3>
         </div>
-        <div className="h-64 w-full">
+        <ChartWrapper height={256}>
            <ResponsiveContainer width="100%" height="100%">
              <BarChart data={chartData}>
                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
@@ -244,7 +258,7 @@ export const ReportsSection: React.FC = () => {
                <Bar dataKey="expenses" fill="#00D4FF10" stroke="#00D4FF" radius={[6, 6, 0, 0]} barSize={25} />
              </BarChart>
            </ResponsiveContainer>
-        </div>
+        </ChartWrapper>
         <p className="text-center mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest italic">جميع المبالغ المعروضة بالعملة المختارة كتحليل تقديري</p>
       </div>
     </div>

@@ -68,18 +68,18 @@ export const PatientSection: React.FC = () => {
           </div>
         </div>
       </div>
-    )},
+    ), exportValue: (p: Patient) => p.name },
     { header: 'حالة العلاج', accessor: (p: Patient) => (
       <div className="flex flex-col">
         <span className="text-xs font-bold text-brand-navy mb-0.5">{p.condition}</span>
         <div className="flex items-center gap-2">
            <div className={`w-1.5 h-1.5 rounded-full ${p.assignedHospitalId ? 'bg-brand-green' : 'bg-slate-200'}`} />
            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
-             {p.assignedHospitalId ? 'Hospital Assigned' : 'Awaiting Matrix'}
+             {p.assignedHospitalId ? 'تم تحديد المستشفى' : 'بانتظار التحليل'}
            </span>
         </div>
       </div>
-    )},
+    ), exportValue: (p: Patient) => p.condition },
     { header: 'التقدم العملياتي', accessor: (p: Patient) => (
       <span className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-[0.2em] shadow-sm border ${
         p.status === 'Active' ? 'bg-green-50 text-green-600 border-green-100' : 
@@ -87,15 +87,17 @@ export const PatientSection: React.FC = () => {
         p.status === 'Inquiry' ? 'bg-amber-50 text-amber-600 border-amber-100' :
         'bg-slate-50 text-slate-400 border-slate-100'
       }`}>
-        {p.status}
+        {p.status === 'Active' ? 'نشط' : 
+         p.status === 'Confirmed' ? 'مؤكد' : 
+         p.status === 'Inquiry' ? 'استفسار' : p.status}
       </span>
-    )},
+    ), exportValue: (p: Patient) => p.status },
     { header: 'آخر تحديث', accessor: (p: Patient) => (
       <div className="flex items-center gap-2 text-slate-400">
         <Calendar size={12} className="opacity-40" />
         <span className="text-[11px] font-bold tabular-nums italic">{new Date(p.lastContact).toLocaleDateString()}</span>
       </div>
-    )},
+    ), exportValue: (p: Patient) => new Date(p.lastContact).toLocaleDateString() },
   ];
 
   if (selectedPatient) {

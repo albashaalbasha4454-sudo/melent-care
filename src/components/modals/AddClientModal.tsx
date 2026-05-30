@@ -64,7 +64,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isOpen, onClose,
               <h3 className="text-2xl font-black text-brand-navy">
                 {clientToEdit ? 'تعديل بيانات العميل' : 'إضافة عميل جديد'}
               </h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">CRM - Client Relationship Management</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">إدارة علاقات العملاء - CRM</p>
             </div>
           </div>
           <button onClick={onClose} className="w-10 h-10 flex items-center justify-center bg-white rounded-xl text-slate-300 hover:text-brand-navy shadow-sm transition-all"><X /></button>
@@ -83,18 +83,18 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isOpen, onClose,
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">اسم العميل بالكامل / اسم الشركة</label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="Full Name or Company Entity" />
+                <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الاسم الكامل أو اسم الوحدة التجارية" />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">تصنيف العميل</label>
               <select value={formData.type} onChange={e => setFormData({...formData, type: e.target.value as ClientType})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm">
-                <option value="Individual">فرد (Individual)</option>
-                <option value="Company">شركة (Company)</option>
-                <option value="Hospital">مستشفى (Hospital)</option>
-                <option value="Clinic">مركز طبي (Clinic)</option>
-                <option value="Distributor">موزع (Distributor)</option>
+                <option value="Individual">فرد</option>
+                <option value="Company">شركة</option>
+                <option value="Hospital">مستشفى</option>
+                <option value="Clinic">مركز طبي</option>
+                <option value="Distributor">موزع</option>
               </select>
             </div>
 
@@ -102,7 +102,7 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isOpen, onClose,
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">الموقع / الدولة</label>
               <div className="relative">
                 <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="Country / City" />
+                <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="الدولة / المدينة" />
               </div>
             </div>
 
@@ -123,8 +123,8 @@ export const AddClientModal: React.FC<AddClientModalProps> = ({ isOpen, onClose,
             </div>
 
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">الشخص المسؤول (Contact Person)</label>
-              <input type="text" value={formData.contactPerson} onChange={e => setFormData({...formData, contactPerson: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="Name of primary contact" />
+              <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">الشخص المسؤول</label>
+              <input type="text" value={formData.contactPerson} onChange={e => setFormData({...formData, contactPerson: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-green/20 transition-all font-bold text-sm" placeholder="اسم جهة الاتصال الأساسية" />
             </div>
           </div>
 

@@ -100,7 +100,7 @@ export const HotelSection: React.FC = () => {
               const name = prompt('أدخل اسم الفندق الجديد:');
               if (name) {
                 const newHotel: Hotel = {
-                  id: 'htl' + Date.now(),
+                  id: 'htl' + Date.now() + Math.random().toString(36).substring(2, 9),
                   name,
                   location: 'تركيا، اسطنبول',
                   stars: 5,

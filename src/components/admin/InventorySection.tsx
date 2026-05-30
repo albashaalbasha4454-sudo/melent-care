@@ -57,7 +57,7 @@ export const InventorySection: React.FC = () => {
       <div className="flex items-center justify-between mb-2">
         <div>
           <h2 className="text-2xl font-black text-brand-navy tracking-tighter uppercase">المخزون واللوجستيات</h2>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Stock Levels & Critical Alerts</p>
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">مستويات المخزون والتنبيهات الحرجة</p>
         </div>
         <button 
           onClick={handleExport}

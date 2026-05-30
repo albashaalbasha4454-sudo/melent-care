@@ -5,6 +5,20 @@ import {
   AreaChart, Area, Cell, PieChart as RechartsPie, Pie
 } from 'recharts';
 import { LocalStorageManager, MELENT_KEYS } from '../../services/localStorageManager';
+
+const ChartWrapper: React.FC<{ children: React.ReactNode; height: number | string }> = ({ children, height }) => {
+  const [isReady, setIsReady] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div style={{ height, width: '100%', minWidth: 0, overflow: 'hidden' }}>
+      {isReady && children}
+    </div>
+  );
+};
 import { Patient, TravelInvoice, PartnerHospital, MedicalProgram } from '../../types';
 
 export const TravelReportsSection: React.FC = () => {
@@ -103,7 +117,7 @@ export const TravelReportsSection: React.FC = () => {
                </div>
             </div>
             
-            <div className="h-[350px]">
+            <ChartWrapper height={350}>
                <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={revenueData}>
                     <defs>
@@ -123,7 +137,7 @@ export const TravelReportsSection: React.FC = () => {
                     <Area type="monotone" dataKey="target" stroke="#e2e8f0" strokeDasharray="5 5" fill="transparent" />
                   </AreaChart>
                </ResponsiveContainer>
-            </div>
+            </ChartWrapper>
          </div>
 
          {/* Demographic Topology */}
@@ -135,7 +149,7 @@ export const TravelReportsSection: React.FC = () => {
                <p className="text-[10px] font-black text-brand-cyan uppercase tracking-widest opacity-60">Lead Source Distribution</p>
             </div>
 
-            <div className="h-[250px] relative z-10 my-8">
+            <ChartWrapper height={250}>
                <ResponsiveContainer width="100%" height="100%">
                   <RechartsPie>
                     <Pie
@@ -152,7 +166,7 @@ export const TravelReportsSection: React.FC = () => {
                     <Tooltip />
                   </RechartsPie>
                </ResponsiveContainer>
-            </div>
+            </ChartWrapper>
 
             <div className="relative z-10 space-y-4">
                {countryData.slice(0, 3).map((item, i) => (

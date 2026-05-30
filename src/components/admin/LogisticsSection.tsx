@@ -14,7 +14,7 @@ export const LogisticsSection: React.FC = () => {
       id: `SHP-${o.id.slice(0, 4)}`,
       destination: 'المستودع الرئيسي',
       status: o.status === 'Delivered' ? 'Arrived' : 'In Transit',
-      carrier: 'DHL Global',
+      carrier: 'دي إتش إل العالمية (DHL)',
       weight: '45kg'
     }));
     setShipments(derived);

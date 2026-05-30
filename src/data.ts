@@ -96,6 +96,7 @@ export const mockProducts: Product[] = [
     name: 'أجهزة ليزر متطورة',
     category: 'Equipment',
     price: 15000,
+    purchasePrice: 11500,
     stock: 5,
   },
   {
@@ -103,6 +104,7 @@ export const mockProducts: Product[] = [
     name: 'مستلزمات طبية جراحية',
     category: 'Supplies',
     price: 250,
+    purchasePrice: 180,
     stock: 500,
   },
 ];

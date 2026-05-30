@@ -38,6 +38,21 @@ import {
   ResponsiveContainer,
   Cell
 } from 'recharts';
+
+const ChartWrapper: React.FC<{ children: React.ReactNode; height: number | string }> = ({ children, height }) => {
+  const [isReady, setIsReady] = React.useState(false);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setIsReady(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div style={{ height, width: '100%', minWidth: 0, overflow: 'hidden' }}>
+      {isReady && children}
+    </div>
+  );
+};
+
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Logo } from './Logo';
@@ -74,29 +89,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
   // Initialize Data from Local Storage or Mock
   useEffect(() => {
+    const isInitialized = localStorage.getItem('melent_database_initialized') === 'true';
     const storedOrders = LocalStorageManager.get(MELENT_KEYS.ORDERS);
     const storedProducts = LocalStorageManager.get(MELENT_KEYS.PRODUCTS);
     const storedExpenses = LocalStorageManager.get(MELENT_KEYS.EXPENSES);
     
-    if (storedOrders && storedOrders.length > 0) {
+    if (storedOrders) {
       setOrders(storedOrders);
-    } else {
+    } else if (!isInitialized) {
       setOrders(mockMedicalOrders);
       LocalStorageManager.save(MELENT_KEYS.ORDERS, mockMedicalOrders);
     }
 
-    if (storedProducts && storedProducts.length > 0) {
+    if (storedProducts) {
       setProducts(storedProducts);
-    } else {
+    } else if (!isInitialized) {
       setProducts(mockProducts);
       LocalStorageManager.save(MELENT_KEYS.PRODUCTS, mockProducts);
     }
 
-    if (storedExpenses && storedExpenses.length > 0) {
+    if (storedExpenses) {
       setExpenses(storedExpenses);
-    } else {
+    } else if (!isInitialized) {
       setExpenses(mockExpenses);
       LocalStorageManager.save(MELENT_KEYS.EXPENSES, mockExpenses);
+    }
+
+    if (!isInitialized) {
+      localStorage.setItem('melent_database_initialized', 'true');
     }
   }, []);
 
@@ -220,12 +240,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex overflow-hidden">
+      {/* Sidebar Overlay for Mobile */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+           <motion.div 
+             initial={{ opacity: 0 }} 
+             animate={{ opacity: 1 }} 
+             exit={{ opacity: 0 }}
+             onClick={() => setIsSidebarOpen(false)}
+             className="fixed inset-0 bg-brand-navy/20 backdrop-blur-sm z-[45] lg:hidden"
+           />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
       <AnimatePresence mode="wait">
         {isSidebarOpen && (
           <motion.div 
             initial={{ x: 280 }} animate={{ x: 0 }} exit={{ x: 280 }}
-            className="w-72 bg-white h-screen border-l border-slate-100 flex flex-col relative z-50 shrink-0 shadow-2xl"
+            className="fixed lg:relative w-72 bg-white h-screen border-l border-slate-100 flex flex-col z-50 shrink-0 shadow-2xl lg:shadow-none"
           >
             <div className="p-8">
               <div className="flex items-center gap-3 mb-10">
@@ -285,37 +318,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
-          <div className="flex items-center gap-6">
-            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-navy transition-colors">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden w-full">
+        <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 lg:px-8 flex items-center justify-between sticky top-0 z-40">
+          <div className="flex items-center gap-2 lg:gap-6">
+            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-navy transition-colors shrink-0">
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <div className="relative w-96 hidden lg:block">
+            <div className="relative w-full max-w-sm hidden md:block">
               <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
               <input 
                 type="text" 
-                placeholder="ابحث عن العقود، المشاريع، أو السجلات المالية..." 
+                placeholder="ابحث..." 
                 className="w-full bg-slate-50 border-transparent rounded-xl py-2.5 pr-12 pl-4 text-sm font-bold focus:bg-white focus:border-brand-navy/10 transition-all outline-none"
               />
             </div>
           </div>
-          <div className="flex items-center gap-6">
-             <div className="hidden md:flex bg-slate-50 border border-slate-100 rounded-xl px-4 py-2 items-center gap-3">
+          <div className="flex items-center gap-3 lg:gap-6">
+             <div className="hidden lg:flex bg-slate-50 border border-slate-100 rounded-xl px-4 py-2 items-center gap-3">
                <div className="w-2 h-2 rounded-full bg-brand-green animate-pulse"></div>
                <div className="text-right">
                   <p className="text-[9px] font-black text-brand-navy uppercase tracking-widest leading-none">وضع التخزين: محلي</p>
                   <p className="text-[8px] font-bold text-slate-400 mt-1">تشفير متصفح نشط</p>
                </div>
              </div>
-             <button onClick={openAddOrder} className="bg-brand-navy border-2 border-brand-navy text-white px-6 py-2.5 rounded-2xl flex items-center gap-3 hover:bg-brand-green hover:border-brand-green transition-all shadow-xl shadow-slate-200">
+             <button onClick={openAddOrder} className="bg-brand-navy border-2 border-brand-navy text-white px-4 lg:px-6 py-2.5 rounded-2xl flex items-center gap-3 hover:bg-brand-green hover:border-brand-green transition-all shadow-xl shadow-slate-200">
                 <Plus size={18} className="text-brand-cyan" />
-                <span className="text-sm font-bold">معاملة جديدة</span>
+                <span className="text-xs lg:text-sm font-black uppercase tracking-widest whitespace-nowrap">معاملة جديدة</span>
               </button>
           </div>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-8">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {activeTab === 'Dashboard' ? (
               <>
@@ -377,7 +410,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                      </div>
                   </div>
 
-                  <div className="h-[300px] w-full">
+                  <ChartWrapper height={300}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={weeklyChartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
                         <defs>
@@ -428,7 +461,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
-                  </div>
+                  </ChartWrapper>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -475,7 +508,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
             ) : activeTab === 'Clients' || activeTab === 'Suppliers' ? (
               <UserSection type={activeTab} />
             ) : activeTab === 'Orders' ? (
-              <OrderSection />
+              <OrderSection onEditOrder={openEditOrder} />
             ) : activeTab === 'Inventory' ? (
               <InventorySection />
             ) : activeTab === 'Finance' ? (

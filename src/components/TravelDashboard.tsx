@@ -59,15 +59,19 @@ export const TravelDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }
 
   // Initialize Data
   useEffect(() => {
+    const isInitialized = localStorage.getItem('melent_database_initialized') === 'true';
     const storedPatients = LocalStorageManager.get(MELENT_KEYS.TRAVEL_PATIENTS);
     const storedHospitals = LocalStorageManager.get(MELENT_KEYS.TRAVEL_HOSPITALS); 
 
-    if (!storedPatients || storedPatients.length === 0) {
-      LocalStorageManager.save(MELENT_KEYS.TRAVEL_PATIENTS, mockPatients);
-    }
-    
-    if (!storedHospitals || storedHospitals.length === 0) {
-      LocalStorageManager.save(MELENT_KEYS.TRAVEL_HOSPITALS, mockHospitals);
+    if (!isInitialized) {
+      if (!storedPatients || storedPatients.length === 0) {
+        LocalStorageManager.save(MELENT_KEYS.TRAVEL_PATIENTS, mockPatients);
+      }
+      
+      if (!storedHospitals || storedHospitals.length === 0) {
+        LocalStorageManager.save(MELENT_KEYS.TRAVEL_HOSPITALS, mockHospitals);
+      }
+      localStorage.setItem('melent_database_initialized', 'true');
     }
 
     // Initialize all other keys if empty
@@ -144,7 +148,7 @@ export const TravelDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }
                 <Logo className="h-10" />
                 <div>
                    <h2 className="text-xl font-black text-brand-navy leading-none">MELENT</h2>
-                   <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.2em] mt-1">Medical Travel</p>
+                   <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.2em] mt-1">السياحة الطبية</p>
                 </div>
               </div>
 
@@ -180,7 +184,7 @@ export const TravelDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }
                     <User size={20} />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-brand-navy uppercase tracking-tighter">Travel Ops Director</p>
+                    <p className="text-[10px] font-black text-brand-navy uppercase tracking-tighter">مدير عمليات السفر</p>
                     <p className="text-[9px] font-bold text-slate-400">ops@melent.care</p>
                   </div>
                </div>
@@ -203,7 +207,7 @@ export const TravelDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }
               <Search className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
               <input 
                 type="text" 
-                placeholder="Search patient records, PNR, flight status..." 
+                placeholder="ابحث في سجلات المرضى، الرحلات، وحالة الطيران..." 
                 className="w-full bg-slate-50 border-transparent rounded-xl py-2.5 pr-12 pl-4 text-xs font-black uppercase tracking-widest focus:bg-white focus:border-brand-navy/10 transition-all outline-none"
               />
             </div>
@@ -212,7 +216,7 @@ export const TravelDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }
           <div className="flex items-center gap-4">
              <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl">
                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Global Ops Online</span>
+               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">العمليات العالمية نشطة</span>
              </div>
              <button className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-navy relative">
                 <Bell size={20} />

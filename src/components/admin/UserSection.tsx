@@ -15,10 +15,7 @@ export const UserSection: React.FC<UserSectionProps> = ({ type }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Client | null>(null);
 
-  const storageKey = type === 'Clients' ? MELENT_KEYS.CLIENTS : MELENT_KEYS.PRODUCTS; // Note: Products was a typo/placeholder in old code, should use a SUPPLIERS key if available.
-  // Check if MELENT_KEYS has SUPPLIERS, if not I might need to add it or use a separate key.
-  // For now I'll use CLIENTS for both if type is Clients, or a prefixed key.
-  const effectiveKey = type === 'Clients' ? MELENT_KEYS.CLIENTS : 'melent_suppliers';
+  const effectiveKey = type === 'Clients' ? MELENT_KEYS.CLIENTS : MELENT_KEYS.SUPPLIERS;
 
   useEffect(() => {
     const stored = LocalStorageManager.get(effectiveKey);
@@ -88,7 +85,7 @@ export const UserSection: React.FC<UserSectionProps> = ({ type }) => {
     { header: 'التواصل', accessor: (u: Client) => (
       <div className="flex items-center gap-2">
         <Phone size={14} className="text-slate-300" />
-        <span dir="ltr">{u.phone || 'N/A'}</span>
+        <span dir="ltr">{u.phone || 'غير متوفر'}</span>
       </div>
     )},
   ];
@@ -101,7 +98,7 @@ export const UserSection: React.FC<UserSectionProps> = ({ type }) => {
             {type === 'Clients' ? 'إدارة العملاء' : 'إدارة الموردين'}
           </h2>
           <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.3em] mt-1">
-            {type === 'Clients' ? 'Global Medical Clients Network' : 'International Healthcare Suppliers'}
+            {type === 'Clients' ? 'الشبكة العالمية للعملاء الطبيين' : 'الموردين الدوليين للرعاية الصحية'}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">

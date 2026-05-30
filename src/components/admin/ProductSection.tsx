@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Package, Plus, Search, Filter, Edit2, Trash2, LayoutGrid, List, FileDown } from 'lucide-react';
+import { Package, Plus, Search, Filter, Edit2, Trash2, LayoutGrid, List, FileDown, TrendingUp, DollarSign, ArrowUpRight } from 'lucide-react';
 import { Product } from '../../types';
 import { mockProducts } from '../../data';
 import { DataTable } from '../DataTable';
@@ -8,7 +8,7 @@ import { AddProductModal } from '../modals/AddProductModal';
 
 export const ProductSection: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
+  const [viewMode, setViewMode] = useState<'grid' | 'table' | 'selling'>('table');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -63,7 +63,8 @@ export const ProductSection: React.FC = () => {
       </div>
     )},
     { header: 'التصنيف', accessor: (p: Product) => p.category },
-    { header: 'السعر', accessor: (p: Product) => `$${p.price.toLocaleString()}` },
+    { header: 'سعر البيع', accessor: (p: Product) => <span className="font-black text-brand-green">${p.price.toLocaleString()}</span> },
+    { header: 'سعر الشراء', accessor: (p: Product) => <span className="font-bold text-slate-400 opacity-60">${(p.purchasePrice || 0).toLocaleString()}</span> },
     { header: 'المخزون', accessor: (p: Product) => (
       <div className="flex items-center gap-2">
         <div className={`w-2 h-2 rounded-full ${p.stock > 10 ? 'bg-brand-green' : 'bg-red-500'}`} />
@@ -76,16 +77,26 @@ export const ProductSection: React.FC = () => {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">إدارة المنتجات</h2>
-          <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.3em] mt-1">Inventory & Supply Catalog</p>
+          <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">إدارة المنتجات والتسعير</h2>
+          <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.3em] mt-1">كتالوج المخزون وهامش الربح</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <button 
+            onClick={() => setViewMode('selling')}
+            className={`px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 shadow-xl ${
+              viewMode === 'selling' ? 'bg-brand-green text-white scale-105' : 'bg-white border border-brand-green/20 text-brand-green hover:bg-brand-green/5'
+            }`}
+          >
+            <TrendingUp size={16} />
+            تحليل المبيعات (Selling)
+          </button>
+
           <button 
             onClick={handleExport}
             className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand-navy hover:bg-slate-50 transition-all flex items-center gap-2 text-xs font-black uppercase tracking-widest"
           >
             <FileDown size={18} />
-            تصدير البيانات
+            تصدير
           </button>
           
           <div className="bg-white border border-slate-100 p-1 rounded-xl flex gap-1 shadow-sm">
@@ -108,12 +119,57 @@ export const ProductSection: React.FC = () => {
             className="bg-brand-navy text-white px-6 py-4 rounded-2xl font-black text-sm shadow-xl shadow-brand-navy/10 hover:bg-brand-green transition-all flex items-center gap-3 group"
           >
             <Plus size={18} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            إضافة منتج جديد
+            منتج جديد (غير مدرج للحجز)
           </button>
         </div>
       </div>
 
-      {viewMode === 'table' ? (
+      {viewMode === 'selling' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map(p => {
+            const profit = p.price - (p.purchasePrice || 0);
+            const margin = ((profit / p.price) * 100).toFixed(1);
+            return (
+              <div key={p.id} className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm relative overflow-hidden group">
+                <div className="flex items-center justify-between mb-6">
+                   <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-brand-navy shrink-0">
+                      <DollarSign size={24} />
+                   </div>
+                   <div className="text-right">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{p.category}</p>
+                      <h4 className="font-black text-brand-navy">{p.name}</h4>
+                   </div>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                   <div className="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">سعر الشراء (Purchase)</p>
+                      <p className="font-black text-brand-navy">${(p.purchasePrice || 0).toLocaleString()}</p>
+                   </div>
+                   <div className="flex justify-between items-center bg-brand-green/5 p-4 rounded-2xl border border-brand-green/10">
+                      <p className="text-[10px] font-black text-brand-green uppercase tracking-widest">سعر البيع (Selling)</p>
+                      <p className="font-black text-brand-navy">${p.price.toLocaleString()}</p>
+                   </div>
+                </div>
+
+                <div className="pt-6 border-t border-slate-50 flex items-center justify-between">
+                   <div>
+                      <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">صافي الربح</p>
+                      <p className="text-2xl font-black text-brand-greentracking-tighter">${profit.toLocaleString()}</p>
+                   </div>
+                   <div className="text-right">
+                      <p className="text-[10px] font-black text-brand-cyan uppercase tracking-widest mb-1">هامش الربح</p>
+                      <div className="flex items-center gap-1.5 justify-end">
+                         <ArrowUpRight size={14} className="text-brand-cyan" />
+                         <p className="text-lg font-black text-brand-navy">{margin}%</p>
+                      </div>
+                   </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : viewMode === 'table' ? (
         <DataTable 
           data={products} 
           columns={columns}

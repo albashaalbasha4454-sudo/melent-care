@@ -11,8 +11,9 @@ export const SystemManagementSection: React.FC = () => {
   const [metadata, setMetadata] = useState<SystemMetadata | null>(null);
   const [logs, setLogs] = useState<AuditLog[]>([]);
   const [recycleBin, setRecycleBin] = useState<RecycleBinItem[]>([]);
+  const [pendingOrders, setPendingOrders] = useState<any[]>([]);
   const [integrityStatus, setIntegrityStatus] = useState<'IDLE' | 'CHECKING' | 'DONE'>('IDLE');
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'LOGS' | 'BACKUP' | 'RECYCLE'>('OVERVIEW');
+  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'LOGS' | 'BACKUP' | 'RECYCLE' | 'REVIEW'>('OVERVIEW');
 
   useEffect(() => {
     refreshData();
@@ -22,6 +23,30 @@ export const SystemManagementSection: React.FC = () => {
     setMetadata(LocalDB.getMetadata());
     setLogs(LocalDB.get(MELENT_KEYS.AUDIT_LOGS) || []);
     setRecycleBin(LocalDB.get(MELENT_KEYS.RECYCLE_BIN) || []);
+    
+    const allOrders = LocalDB.get(MELENT_KEYS.ORDERS) || [];
+    setPendingOrders(allOrders.filter((o: any) => o.status === 'Admin Review' || o.status === 'Draft'));
+  };
+
+  const handleReviewOrder = (orderId: string, approved: boolean) => {
+    const allOrders = LocalDB.get(MELENT_KEYS.ORDERS) || [];
+    const updated = allOrders.map((o: any) => {
+      if (o.id === orderId) {
+        return { ...o, status: approved ? 'Processing' : 'Rejected' };
+      }
+      return o;
+    });
+    LocalDB.save(MELENT_KEYS.ORDERS, updated);
+    refreshData();
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    if (confirm('هل أنت متأكد من حذف هذا الطلب المعلق؟')) {
+      const allOrders = LocalDB.get(MELENT_KEYS.ORDERS) || [];
+      const updated = allOrders.filter((o: any) => o.id !== orderId);
+      LocalDB.save(MELENT_KEYS.ORDERS, updated);
+      refreshData();
+    }
   };
 
   const handleIntegrityCheck = () => {
@@ -31,7 +56,7 @@ export const SystemManagementSection: React.FC = () => {
       setIntegrityStatus('DONE');
       refreshData();
       if (!result.healthy) {
-        alert("Alert: Data corruption detected in: " + result.issues.join(", "));
+        alert("تنبيه: تم اكتشاف خلل في البيانات في: " + result.issues.join(", "));
       }
     }, 1500);
   };
@@ -106,6 +131,13 @@ export const SystemManagementSection: React.FC = () => {
             className={`px-6 py-2.5 rounded-xl font-black text-xs transition-all ${activeTab === 'RECYCLE' ? 'bg-brand-navy text-white' : 'text-slate-400'}`}
           >
             سلة المهملات
+          </button>
+          <button 
+            onClick={() => setActiveTab('REVIEW')}
+            className={`px-6 py-2.5 rounded-xl font-black text-xs transition-all ${activeTab === 'REVIEW' ? 'bg-brand-navy text-white' : 'text-slate-400'} relative`}
+          >
+            قيد المراجعة
+            {pendingOrders.length > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[8px] flex items-center justify-center rounded-full border-2 border-white">{pendingOrders.length}</span>}
           </button>
         </div>
       </div>
@@ -233,7 +265,7 @@ export const SystemManagementSection: React.FC = () => {
                              log.action === 'DELETE' ? 'bg-red-50 text-red-600' :
                              log.action === 'IMPORT' ? 'bg-brand-cyan/10 text-brand-cyan' : 'bg-slate-50 text-slate-500'
                           }`}>
-                             {log.action}
+                             {log.action === 'CREATE' ? 'إنشاء' : log.action === 'DELETE' ? 'حذف' : log.action === 'IMPORT' ? 'استيراد' : log.action}
                           </span>
                        </td>
                        <td className="px-8 py-4 text-xs font-bold text-slate-500">{log.details}</td>
@@ -359,6 +391,75 @@ export const SystemManagementSection: React.FC = () => {
                      ))}
                   </tbody>
                </table>
+             </div>
+           )}
+        </div>
+      )}
+      {activeTab === 'REVIEW' && (
+        <div className="bg-white rounded-[3rem] border border-slate-100 shadow-sm overflow-hidden animate-in fade-in">
+           <div className="p-8 border-b border-slate-50 flex items-center justify-between">
+              <h3 className="text-xl font-black text-brand-navy flex items-center gap-3">
+                 <Clock className="text-amber-500" size={24} />
+                 طلبات قيد المراجعة الإدارية
+              </h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase">تحتاج إلى موافقة أو تعديل للمتابعة</p>
+           </div>
+
+           {pendingOrders.length === 0 ? (
+             <div className="p-20 text-center">
+                <CheckCircle2 size={64} className="mx-auto text-slate-100 mb-6" />
+                <p className="font-black text-slate-300">لا توجد طلبات معلقة حالياً</p>
+             </div>
+           ) : (
+             <div className="overflow-x-auto">
+                <table className="w-full text-right">
+                   <thead className="bg-slate-50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      <tr>
+                         <th className="px-8 py-4">العميل</th>
+                         <th className="px-8 py-4">القيمة</th>
+                         <th className="px-8 py-4">التاريخ</th>
+                         <th className="px-8 py-4">الحالة الحالية</th>
+                         <th className="px-8 py-4 text-center">الإجراءات الإدارية</th>
+                      </tr>
+                   </thead>
+                   <tbody className="divide-y divide-slate-50">
+                      {pendingOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
+                           <td className="px-8 py-4">
+                              <p className="font-bold text-brand-navy">{order.clientName}</p>
+                              <p className="text-[10px] text-slate-400">{order.id}</p>
+                           </td>
+                           <td className="px-8 py-4 font-black">{(order.financials?.total || 0).toLocaleString()} $</td>
+                           <td className="px-8 py-4 text-xs font-bold text-slate-400">{new Date(order.date).toLocaleDateString('ar-EG')}</td>
+                           <td className="px-8 py-4">
+                              <span className="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[9px] font-black">{order.status}</span>
+                           </td>
+                           <td className="px-8 py-4">
+                              <div className="flex items-center justify-center gap-2">
+                                 <button 
+                                   onClick={() => handleReviewOrder(order.id, true)}
+                                   className="px-4 py-2 bg-brand-green text-white rounded-xl text-[10px] font-black hover:bg-brand-navy transition-all"
+                                 >
+                                    اعتماد الطلب
+                                 </button>
+                                 <button 
+                                   onClick={() => handleReviewOrder(order.id, false)}
+                                   className="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl text-[10px] font-black hover:bg-red-50 hover:text-red-500 transition-all"
+                                 >
+                                    رفض
+                                 </button>
+                                 <button 
+                                   onClick={() => handleDeleteOrder(order.id)}
+                                   className="p-2 text-slate-200 hover:text-red-500 transition-colors"
+                                 >
+                                    <Trash2 size={16} />
+                                 </button>
+                              </div>
+                           </td>
+                        </tr>
+                      ))}
+                   </tbody>
+                </table>
              </div>
            )}
         </div>

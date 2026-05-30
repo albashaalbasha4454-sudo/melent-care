@@ -65,7 +65,7 @@ export const HelpFab: React.FC = () => {
               </div>
               
               <div className="pt-2">
-                <p className="text-[9px] text-center font-black text-slate-300 uppercase tracking-widest">Melent Care Tech Support v2.0</p>
+                <p className="text-[9px] text-center font-black text-slate-300 uppercase tracking-widest">ميلنت كير - الدعم التقني v2.0</p>
               </div>
             </div>
           </motion.div>

@@ -87,7 +87,7 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                     <Logo className="w-20 h-20" />
                     <div>
                       <h1 className="text-3xl font-black text-brand-navy tracking-tight">فاتورة ضريبية</h1>
-                      <p className="text-[10px] text-brand-green font-black uppercase tracking-[0.3em] mt-1">Tax Invoice • The Bridge Between Health, Tourism and Trade</p>
+                      <p className="text-[10px] text-brand-green font-black uppercase tracking-[0.3em] mt-1">فاتورة رسمية • الجسر بين الصحة والسياحة والتجارة</p>
                     </div>
                   </div>
                   <div className="text-right md:text-left">
@@ -103,7 +103,7 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                   <div>
                     <h3 className="text-[10px] text-brand-green font-black uppercase tracking-widest mb-4">بيانات الشركة / From</h3>
                     <div className="space-y-1">
-                      <p className="font-black text-brand-navy text-sm uppercase">Melent Global Care</p>
+                      <p className="font-black text-brand-navy text-sm uppercase">Melent للرعاية العالمية</p>
                       <p className="text-sm text-slate-500 font-medium leading-relaxed">حلول التوريد الطبي الدولية</p>
                       <p className="text-sm text-slate-500 font-medium">إسطنبول - الرياض</p>
                       <p className="text-sm text-slate-500 font-medium tracking-tight">info@melent.healthcare</p>
@@ -121,7 +121,7 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                         </span>
                         {order.executionLocation === 'Turkey' && (
                           <span className="text-[9px] font-black uppercase px-2 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-lg text-brand-gold">
-                             Turkey Origin
+                             منشأ تركي
                           </span>
                         )}
                         <span className="text-[9px] font-black uppercase px-2 py-1 bg-brand-navy/5 border border-brand-navy/10 rounded-lg text-brand-navy">
@@ -180,7 +180,7 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                 <div className="flex justify-end pt-6">
                   <div className="w-full md:w-80 space-y-4">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-400 font-bold uppercase tracking-widest">المجموع الفرعي (Items)</span>
+                      <span className="text-slate-400 font-bold uppercase tracking-widest">المجموع الفرعي (العناصر)</span>
                       <span className="font-bold text-slate-700">{(order.financials?.subtotal || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
                     </div>
                     {((order.financials?.intlShippingFee || 0) > 0 || (order.financials?.localDeliveryFee || 0) > 0) && (

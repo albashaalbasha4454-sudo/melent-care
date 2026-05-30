@@ -90,7 +90,7 @@ export const ProgramSection: React.FC = () => {
               const name = prompt('أدخل اسم البرنامج الجديد:');
               if (name) {
                 const newProgram: MedicalProgram = {
-                  id: 'prog' + Date.now(),
+                  id: 'prog' + Date.now() + Math.random().toString(36).substring(2, 9),
                   name,
                   category: 'General',
                   durationDays: 7,

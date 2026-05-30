@@ -63,7 +63,7 @@ export const AddExpenseModal: React.FC<AddExpenseModalProps> = ({ isOpen, onClos
               <h3 className="text-xl font-black text-brand-navy">
                 {expenseToEdit ? 'تعديل مصروف' : 'تسجيل مصروف جديد'}
               </h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Financial Outflow Management</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">إدارة التدفقات المالية الخارجة</p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-300 hover:text-brand-navy transition-colors"><X size={24} /></button>

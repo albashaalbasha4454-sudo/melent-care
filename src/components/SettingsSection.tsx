@@ -9,6 +9,8 @@ export const SettingsSection: React.FC = () => {
   const [storageStatus, setStorageStatus] = useState<any>(null);
   const [deleteConfirm, setDeleteConfirm] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showFactoryReset, setShowFactoryReset] = useState(false);
+  const [factoryConfirm, setFactoryConfirm] = useState('');
 
   useEffect(() => {
     setLastBackup(LocalStorageManager.getLastBackupDate());
@@ -56,6 +58,14 @@ export const SettingsSection: React.FC = () => {
     }
   };
 
+  const handleFactoryReset = () => {
+    if (factoryConfirm === 'RESET ALL') {
+      LocalStorageManager.factoryReset();
+    } else {
+      alert('كلمة التأكيد غير صحيحة.');
+    }
+  };
+
   const isBackupOld = () => {
     if (!lastBackup) return true;
     const days = (new Date().getTime() - new Date(lastBackup).getTime()) / (1000 * 3600 * 24);
@@ -67,8 +77,8 @@ export const SettingsSection: React.FC = () => {
       {/* Header with Local Status */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="flex flex-col gap-2">
-          <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">مركز سلامة البيانات (Data Safety)</h2>
-          <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.3em]">نظام تخزين محلي كامل (Local Storage Only)</p>
+          <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">مركز سلامة البيانات</h2>
+          <p className="text-[10px] font-black text-brand-green uppercase tracking-[0.3em]">نظام تخزين محلي كامل (تخزين المتصفح فقط)</p>
         </div>
         
         <div className="flex gap-4">
@@ -207,49 +217,66 @@ export const SettingsSection: React.FC = () => {
 
         {/* Danger Zone */}
         <div className="bg-red-50 p-10 rounded-[3rem] border border-red-100 lg:col-span-2 relative overflow-hidden">
-           <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-              <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-red-500 shadow-sm shrink-0 border border-red-100">
-                <Trash2 size={40} />
-              </div>
-              <div className="grow">
-                <h4 className="text-xl font-black text-red-900 mb-2">منطقة الخطر: الحذف النهائي للمفاتيح</h4>
-                <p className="text-red-900/60 text-sm font-bold max-w-xl">
-                  سيقوم هذا الإجراء بحذف جميع بيانات "ميلنت كير" فقط من هذا المتصفح. لا يمكن التراجع عن هذا الإجراء إلا بوجود نسخة احتياطية خارجية.
-                </p>
-              </div>
-              
-              {!showDeleteConfirm ? (
-                <button 
-                  onClick={() => setShowDeleteConfirm(true)}
-                  className="bg-red-500 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-red-500/10"
-                >
-                  بدء إجراء المسح الآمن
-                </button>
-              ) : (
-                <div className="flex flex-col gap-3 w-full md:w-auto">
-                  <input 
-                    type="text" 
-                    placeholder="اكتب: DELETE MELENT DATA" 
-                    className="bg-white border-2 border-red-200 px-6 py-4 rounded-xl text-xs font-black text-center focus:border-red-500 outline-none transition-all"
-                    value={deleteConfirm}
-                    onChange={(e) => setDeleteConfirm(e.target.value)}
-                  />
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={handleSafeClear}
-                      className="flex-1 bg-red-600 text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-700"
-                    >
-                      تأكيد الحذف النهائي
-                    </button>
-                    <button 
-                      onClick={() => setShowDeleteConfirm(false)}
-                      className="px-6 bg-slate-200 text-slate-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300"
-                    >
-                      إلغاء
-                    </button>
-                  </div>
+           <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+             <div className="grid grid-cols-6 gap-4 p-4">
+               {[...Array(24)].map((_, i) => <Trash2 key={i} size={40} className="text-red-900" />)}
+             </div>
+           </div>
+           
+           <div className="relative z-10 flex flex-col gap-10">
+              <div className="flex flex-col md:flex-row items-center gap-10">
+                <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-red-500 shadow-sm shrink-0 border border-red-100">
+                  <Trash2 size={40} />
                 </div>
-              )}
+                <div className="grow">
+                  <h4 className="text-xl font-black text-red-900 mb-2">منطقة التحكم الكلي: تصفير البرنامج</h4>
+                  <p className="text-red-900/60 text-sm font-bold max-w-xl">
+                    سيقوم هذا الإجراء بمسح كافة السجلات، العملاء، المرضى، والطلبات لبدء البرنامج كنسخة فارغة تماماً وجاهزة لبياناتك الخاصة.
+                  </p>
+                </div>
+                
+                {!showFactoryReset ? (
+                  <button 
+                    onClick={() => setShowFactoryReset(true)}
+                    className="bg-red-600 text-white px-10 py-5 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-red-500/10"
+                  >
+                    إعادة ضبط المصنع (تصفير)
+                  </button>
+                ) : (
+                  <div className="flex flex-col gap-3 w-full md:w-auto">
+                    <input 
+                      type="text" 
+                      placeholder="اكتب: RESET ALL" 
+                      className="bg-white border-2 border-red-200 px-6 py-4 rounded-xl text-xs font-black text-center focus:border-red-500 outline-none transition-all"
+                      value={factoryConfirm}
+                      onChange={(e) => setFactoryConfirm(e.target.value)}
+                    />
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={handleFactoryReset}
+                        className="flex-1 bg-red-600 text-white py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-red-700"
+                      >
+                        تأكيد التصفير النهائي
+                      </button>
+                      <button 
+                        onClick={() => setShowFactoryReset(false)}
+                        className="px-6 bg-slate-200 text-slate-600 py-4 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-300"
+                      >
+                        تراجع
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="border-t border-red-100 pt-8 mt-4">
+                <div className="flex flex-col md:flex-row items-center gap-6 opacity-60">
+                  <AlertTriangle className="text-red-400" size={24} />
+                  <p className="text-[11px] font-black text-red-900/60 uppercase tracking-widest">
+                    تحذير: سيتم حذف كافة البيانات المخزنة من "التجارة واللوجستيات" و "السياحة الطبية" معاً.
+                  </p>
+                </div>
+              </div>
            </div>
         </div>
       </div>

@@ -15,6 +15,7 @@ export const MELENT_KEYS = {
   REPORTS: 'melent_reports',
   SETTINGS: 'melent_settings',
   USERS: 'melent_users',
+  SUPPLIERS: 'melent_suppliers',
   AUDIT_LOGS: 'melent_audit_logs',
   RECYCLE_BIN: 'melent_recycle_bin',
   BACKUPS: 'melent_backups',
@@ -274,12 +275,29 @@ export const LocalDB = {
       MELENT_KEYS.FINANCE,
       MELENT_KEYS.REPORTS,
       MELENT_KEYS.AUDIT_LOGS,
-      MELENT_KEYS.RECYCLE_BIN
+      MELENT_KEYS.RECYCLE_BIN,
+      MELENT_KEYS.TRAVEL_PATIENTS,
+      MELENT_KEYS.TRAVEL_PROGRAMS,
+      MELENT_KEYS.TRAVEL_HOSPITALS,
+      MELENT_KEYS.TRAVEL_DOCTORS,
+      MELENT_KEYS.TRAVEL_HOTELS,
+      MELENT_KEYS.TRAVEL_FLIGHTS,
+      MELENT_KEYS.TRAVEL_TRANSFERS,
+      MELENT_KEYS.TRAVEL_INVOICES,
+      MELENT_KEYS.TRAVEL_SETTINGS,
+      MELENT_KEYS.PATIENT_QUICK_NOTES
     ];
 
     businessKeys.forEach(k => localStorage.setItem(k, JSON.stringify([])));
+    localStorage.setItem('melent_database_initialized', 'true');
     
     LocalDB.logAction('SYSTEM', 'RESET', 'BUSINESS_DATA', 'Complete business data wipe performed');
+  },
+
+  factoryReset: () => {
+    localStorage.clear();
+    localStorage.setItem('melent_database_initialized', 'true');
+    window.location.reload();
   },
 
   // --- Utilities ---
@@ -321,5 +339,6 @@ export const LocalStorageManager = {
          return true;
       }
       return false;
-    }
+    },
+    factoryReset: () => LocalDB.factoryReset()
 };

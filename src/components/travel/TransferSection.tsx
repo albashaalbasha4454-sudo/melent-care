@@ -110,7 +110,7 @@ export const TransferSection: React.FC = () => {
               const driver = prompt('أدخل اسم السائق الجديد:');
               if (driver) {
                 const newTransfer: TransferService = {
-                  id: 'trn' + Date.now(),
+                  id: 'trn' + Date.now() + Math.random().toString(36).substring(2, 9),
                   patientId: patients[0]?.id || '',
                   patientName: patients[0]?.name || 'Unknown Patient',
                   type: 'Airport-Hotel',

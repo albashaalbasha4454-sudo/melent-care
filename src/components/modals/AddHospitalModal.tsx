@@ -82,7 +82,7 @@ export const AddHospitalModal: React.FC<AddHospitalModalProps> = ({ isOpen, onCl
               <h3 className="text-2xl font-black text-brand-navy">
                 {hospitalToEdit ? 'تعديل بيانات المستشفى' : 'إضافة مستشفى شريك جديد'}
               </h3>
-              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Healthcare Partner Management</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">إدارة شركاء الرعاية الصحية</p>
             </div>
           </div>
           <button onClick={onClose} className="w-10 h-10 flex items-center justify-center bg-white rounded-xl text-slate-300 hover:text-brand-navy shadow-sm transition-all"><X /></button>
@@ -99,37 +99,37 @@ export const AddHospitalModal: React.FC<AddHospitalModalProps> = ({ isOpen, onCl
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-1.5 md:col-span-2">
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">اسم المستشفى / المركز الطبي</label>
-              <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Hospital Full Name" />
+              <input type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Hospital Full Name" />
             </div>
 
             <div className="space-y-1.5">
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">الموقع (الدولة / المدينة)</label>
               <div className="relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Location" />
+                <input type="text" value={formData.location || ''} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 pl-12 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Location" />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">حالة الشراكة</label>
-              <select value={formData.contractStatus} onChange={e => setFormData({...formData, contractStatus: e.target.value as any})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm">
+              <select value={formData.contractStatus || 'Active'} onChange={e => setFormData({...formData, contractStatus: e.target.value as any})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm">
                 <option value="Active">نشط (Active)</option>
                 <option value="Under Negotiation">تحت التفاوض (Under Negotiation)</option>
                 <option value="Expired">منتهي (Expired)</option>
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                <div className="space-y-1.5">
                 <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">التقييم (0-5)</label>
                 <div className="relative">
                   <Star className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-gold" size={18} />
-                  <input type="number" step="0.1" max="5" value={formData.rating} onChange={e => setFormData({...formData, rating: Number(e.target.value)})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-black text-sm text-center" />
+                  <input type="number" step="0.1" max="5" value={formData.rating || 0} onChange={e => setFormData({...formData, rating: Number(e.target.value)})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-black text-sm text-center" />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">بيانات التواصل الرئيسي</label>
-                <input type="text" value={formData.contact} onChange={e => setFormData({...formData, contact: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Phone or Email" />
+                <input type="text" value={formData.contact || ''} onChange={e => setFormData({...formData, contact: e.target.value})} className="w-full bg-slate-50 border-2 border-transparent rounded-2xl p-4 focus:bg-white focus:border-brand-navy/10 transition-all font-bold text-sm" placeholder="Phone or Email" />
               </div>
             </div>
 

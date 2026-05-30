@@ -108,7 +108,7 @@ export const FlightSection: React.FC = () => {
               const pnr = prompt('أدخل رمز PNR للرحلة الجديدة:');
               if (pnr) {
                 const newFlight: FlightReservation = {
-                  id: 'flt' + Date.now(),
+                  id: 'flt' + Date.now() + Math.random().toString(36).substring(2, 9),
                   patientId: patients[0]?.id || '',
                   patientName: patients[0]?.name || 'Unknown Patient',
                   airline: 'Turkish Airlines',
