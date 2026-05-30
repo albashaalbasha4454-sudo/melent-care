@@ -88,28 +88,52 @@ export const TransferSection: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <Bus className="text-orange-500" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Ground Mobility Command</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">قيادة الحركة البرية</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Real-time Fleet Orchestration & Logistics Flow</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">تنسيق الأسطول اللحظي وتدفق العمليات اللوجستية</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
             onClick={handleExport}
             className="p-4 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand-navy shadow-sm transition-all hover:shadow-md"
-            title="Export Fleet Manifest"
+            title="تصدير بيان الأسطول"
           >
             <FileDown size={20} />
           </button>
           <button 
+            onClick={() => {
+              const driver = prompt('أدخل اسم السائق الجديد:');
+              if (driver) {
+                const newTransfer: TransferService = {
+                  id: 'trn' + Date.now(),
+                  patientId: patients[0]?.id || '',
+                  patientName: patients[0]?.name || 'Unknown Patient',
+                  type: 'Airport-Hotel',
+                  driverName: driver,
+                  driverPhone: '+90 555 000 0000',
+                  plateNumber: '34 MEL ' + Math.floor(100 + Math.random() * 899),
+                  pickupLocation: 'مطار اسطنبول',
+                  dropoffLocation: 'فندق الشيراتون',
+                  date: new Date().toISOString().split('T')[0],
+                  time: '11:00 AM',
+                  pickupTime: '11:00 AM',
+                  status: 'Scheduled',
+                  vehicleType: 'Luxury Van'
+                };
+                const updated = [...transfers, newTransfer];
+                setTransfers(updated);
+                LocalStorageManager.save(MELENT_KEYS.TRAVEL_TRANSFERS, updated);
+              }
+            }}
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Dispatch New Unit
+            إرسال وحدة جديدة
           </button>
         </div>
       </div>
@@ -131,7 +155,7 @@ export const TransferSection: React.FC = () => {
                <Map size={32} />
             </div>
             <div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Route Efficiency</p>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">كفاءة المسار</p>
                <p className="text-2xl font-black text-brand-navy">94.2%</p>
             </div>
          </div>
@@ -141,19 +165,19 @@ export const TransferSection: React.FC = () => {
                <ShieldCheck size={32} />
             </div>
             <div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Safety Protocols</p>
-               <p className="text-2xl font-black text-brand-navy">Certified</p>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">بروتوكولات السلامة</p>
+               <p className="text-2xl font-black text-brand-navy">معتمد</p>
             </div>
          </div>
 
          <div className="bg-brand-navy p-8 rounded-[3.5rem] text-white relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+            <div className="absolute top-0 left-0 w-32 h-32 bg-brand-cyan/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
             <div className="relative z-10">
                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-black uppercase text-brand-cyan tracking-widest">Live Flow</span>
+                  <span className="text-[10px] font-black uppercase text-brand-cyan tracking-widest">التدفق اللحظي</span>
                   <Activity size={18} className="text-brand-cyan animate-pulse" />
                </div>
-               <p className="text-3xl font-black">{transfers.length} Active Dispatches</p>
+               <p className="text-3xl font-black">{transfers.length} مهمة نشطة</p>
             </div>
          </div>
       </div>

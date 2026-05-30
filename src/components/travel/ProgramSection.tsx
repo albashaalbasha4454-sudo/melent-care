@@ -69,14 +69,14 @@ export const ProgramSection: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <Stethoscope className="text-brand-green" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Medical Architecture</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">مركز تصميم البرامج</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Design, Price & Deploy Specialized Healthcare Packages</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">تصميم وتسعير ونشر باقات الرعاية الصحية المتخصصة</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
@@ -86,10 +86,30 @@ export const ProgramSection: React.FC = () => {
             <FileDown size={20} />
           </button>
           <button 
+            onClick={() => {
+              const name = prompt('أدخل اسم البرنامج الجديد:');
+              if (name) {
+                const newProgram: MedicalProgram = {
+                  id: 'prog' + Date.now(),
+                  name,
+                  category: 'General',
+                  durationDays: 7,
+                  basePrice: 2000,
+                  hospitals: [],
+                  doctors: [],
+                  description: 'برنامج طبي جديد',
+                  includedServices: [],
+                  excludedServices: []
+                };
+                const updated = [...programs, newProgram];
+                setPrograms(updated);
+                LocalStorageManager.save(MELENT_KEYS.TRAVEL_PROGRAMS, updated);
+              }
+            }}
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Engineer New Program
+            إضافة برنامج جديد
           </button>
         </div>
       </div>
@@ -102,8 +122,8 @@ export const ProgramSection: React.FC = () => {
                <Award size={32} />
             </div>
             <div className="relative z-10">
-               <p className="text-[10px] font-black text-brand-cyan uppercase tracking-widest mb-1">Catalog Integrity</p>
-               <p className="text-2xl font-black">{programs.length} Active SKUs</p>
+               <p className="text-[10px] font-black text-brand-cyan uppercase tracking-widest mb-1">سلامة الكتالوج</p>
+               <p className="text-2xl font-black">{programs.length} وحدة نشطة</p>
             </div>
          </div>
 
@@ -112,7 +132,7 @@ export const ProgramSection: React.FC = () => {
                <DollarSign size={32} />
             </div>
             <div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Portfolio Value</p>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">قيمة المحفظة</p>
                <p className="text-2xl font-black text-brand-navy">${programs.reduce((acc, curr) => acc + curr.basePrice, 0).toLocaleString()}</p>
             </div>
          </div>
@@ -122,8 +142,8 @@ export const ProgramSection: React.FC = () => {
                <Hospital size={32} />
             </div>
             <div>
-               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hospital Density</p>
-               <p className="text-2xl font-black text-brand-navy">{hospitals.length} Linked Nodes</p>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">كثافة المستشفيات</p>
+               <p className="text-2xl font-black text-brand-navy">{hospitals.length} عقدة مرتبطة</p>
             </div>
          </div>
       </div>

@@ -28,6 +28,7 @@ export const MELENT_KEYS = {
   TRAVEL_TRANSFERS: 'melent_travel_transfers',
   TRAVEL_INVOICES: 'melent_travel_invoices',
   TRAVEL_SETTINGS: 'melent_travel_settings',
+  PATIENT_QUICK_NOTES: 'melent_patient_quick_notes',
   LAST_BACKUP: 'melent_last_backup_date',
   AUDIT_LOG: 'melent_audit_log',
 };

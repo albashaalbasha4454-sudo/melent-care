@@ -35,6 +35,7 @@ export interface Doctor {
   experienceYears: number;
   rating: number;
   bio: string;
+  education?: string;
   availability: string;
   contact: string;
   languages: string[];

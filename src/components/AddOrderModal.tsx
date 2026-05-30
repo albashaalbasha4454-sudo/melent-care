@@ -588,18 +588,22 @@ export const AddOrderModal: React.FC<AddOrderModalProps> = ({ isOpen, onClose, o
                               <div className="space-y-1">
                                 <label className="text-[8px] font-black text-slate-400 uppercase mr-1">أجور الشحن الدولي</label>
                                 <input type="number" value={formData.financials?.intlShippingFee} onChange={e => setFormData({...formData, financials: {...formData.financials!, intlShippingFee: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-2 text-xs font-black" />
+                                <p className="text-[7px] text-slate-400 font-bold px-1">تشمل الشحن الجوي أو البحري مع التأمين الدولي.</p>
                               </div>
                               <div className="space-y-1">
                                 <label className="text-[8px] font-black text-slate-400 uppercase mr-1">رسوم الخدمة / تنسيق</label>
                                 <input type="number" value={formData.financials?.serviceFee} onChange={e => setFormData({...formData, financials: {...formData.financials!, serviceFee: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-2 text-xs font-black" />
+                                <p className="text-[7px] text-slate-400 font-bold px-1">القيمة الإضافية لخدمات Melent Care اللوجستية.</p>
                               </div>
                               <div className="space-y-1">
                                 <label className="text-[8px] font-black text-slate-400 uppercase mr-1">رسوم الجمارك</label>
                                 <input type="number" value={formData.financials?.customsFee} onChange={e => setFormData({...formData, financials: {...formData.financials!, customsFee: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-2 text-xs font-black" />
+                                <p className="text-[7px] text-slate-400 font-bold px-1">القيمة المقدرة للتخليص الجمركي ببلد المقصد.</p>
                               </div>
                               <div className="space-y-1">
                                 <label className="text-[8px] font-black text-slate-400 uppercase mr-1">الخصم (Discount)</label>
                                 <input type="number" value={formData.financials?.discount} onChange={e => setFormData({...formData, financials: {...formData.financials!, discount: Number(e.target.value)}})} className="w-full bg-white rounded-xl p-2 text-xs font-black text-red-500" />
+                                <p className="text-[7px] text-slate-400 font-bold px-1">خصم الحصومات أو العروض الخاصة للعملاء.</p>
                               </div>
                            </div>
                         </div>

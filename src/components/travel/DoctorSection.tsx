@@ -76,14 +76,14 @@ export const DoctorSection: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <User className="text-purple-500" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Specialist Roster</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">قائمة الاستشاريين</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Expert Medical Consultation & Surgical Coordination</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">الاستشارات الطبية المتخصصة والتنسيق الجراحي</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
@@ -93,10 +93,31 @@ export const DoctorSection: React.FC = () => {
             <FileDown size={20} />
           </button>
           <button 
+            onClick={() => {
+              const name = prompt('أدخل اسم الطبيب الجديد:');
+              if (name) {
+                const newDoc: Doctor = {
+                  id: 'doc' + Date.now(),
+                  name,
+                  specialty: 'استشاري JCI',
+                  experienceYears: 10,
+                  hospitalId: hospitals[0]?.id || '',
+                  rating: 5.0,
+                  bio: 'طبيب مختص ذو خبرة عالية',
+                  availability: 'Full-time',
+                  contact: '+90 000 000 0000',
+                  education: 'دكتوراه في العلوم الطبية',
+                  languages: ['English', 'Arabic', 'Turkish']
+                };
+                const updated = [...doctors, newDoc];
+                setDoctors(updated);
+                LocalStorageManager.save(MELENT_KEYS.TRAVEL_DOCTORS, updated);
+              }
+            }}
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Recruit Specialist
+            توظيف استشاري جديد
           </button>
         </div>
       </div>
@@ -126,13 +147,13 @@ export const DoctorSection: React.FC = () => {
             </div>
             <div className="relative z-10 p-6 bg-black/10 rounded-[2rem] border border-white/10">
                <p className="text-xs font-bold text-white/80 leading-relaxed italic">
-                 "Our specialist roster ensures that every Melent patient receives world-class treatment from the country's most renowned surgeons."
+                 "تضمن قائمة الاستشاريين لدينا حصول كل مريض في ميلنت على رعاية صحية فائقة تحت إشراف نخبة من الأطباء العموميين المختصين."
                </p>
             </div>
          </div>
 
          <div className="bg-white rounded-[3rem] border border-slate-100 p-8 flex flex-col justify-between shadow-sm">
-            <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-widest mb-6">Expertise Distribution</h4>
+            <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-widest mb-6">توزيع الخبرات الطبية</h4>
             <div className="space-y-4">
                {[
                  { field: 'Plastic Surgery', value: 45 },
@@ -150,8 +171,11 @@ export const DoctorSection: React.FC = () => {
                  </div>
                ))}
             </div>
-            <button className="w-full mt-8 py-4 bg-slate-50 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100">
-               Download Specialist Analytics
+            <button 
+              onClick={() => alert('بدأ تحميل تحليلات الاستشاريين...')}
+              className="w-full mt-8 py-4 bg-slate-50 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-100 transition-all border border-slate-100"
+            >
+               تحميل تحليلات الاستشاريين
             </button>
          </div>
       </div>

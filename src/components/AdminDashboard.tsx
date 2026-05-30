@@ -23,9 +23,23 @@ import {
   Printer,
   ChevronLeft,
   Database,
-  ShieldCheck
+  ShieldCheck,
+  TrendingUp,
+  Calendar
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Cell
+} from 'recharts';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 import { Logo } from './Logo';
 import { AddOrderModal } from './AddOrderModal';
 import { InvoiceModal } from './InvoiceModal';
@@ -104,6 +118,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [editingOrder, setEditingOrder] = useState<MedicalOrder | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<MedicalOrder | null>(null);
 
+  const chartRef = React.useRef<HTMLDivElement>(null);
+
+  const handleDownloadPDF = async () => {
+    if (!chartRef.current) return;
+
+    try {
+      const canvas = await html2canvas(chartRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save(`melent-weekly-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      alert('حدث خطأ أثناء إنشاء التقرير');
+    }
+  };
+
   // Stats Calculations
   const stats = useMemo(() => {
     const totalRevenue = orders.filter(o => o.status === 'Delivered').reduce((acc, o) => acc + (o.financials?.total || 0), 0);
@@ -115,6 +157,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
     return { totalRevenue, totalExpenses, activeContracts, margin };
   }, [orders, expenses]);
+
+  // Weekly Chart Data
+  const weeklyChartData = useMemo(() => {
+    const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const now = new Date();
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(now.getDate() - (6 - i));
+      return {
+        dateStr: d.toISOString().split('T')[0],
+        dayName: days[d.getDay()],
+        count: 0
+      };
+    });
+
+    orders.forEach(order => {
+      const orderDate = order.date.split('T')[0];
+      const foundDay = last7Days.find(d => d.dateStr === orderDate);
+      if (foundDay) {
+        foundDay.count += 1;
+      }
+    });
+
+    return last7Days;
+  }, [orders]);
 
   const handleAddOrder = (order: MedicalOrder) => {
     setOrders(prev => {
@@ -207,6 +274,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                     <p className="text-[10px] font-bold text-slate-400">admin@melent.care</p>
                   </div>
                </div>
+               <div className="mt-4 p-4 bg-brand-navy/5 rounded-2xl border border-brand-navy/5">
+                   <p className="text-[10px] font-bold text-brand-navy leading-relaxed">
+                     إذا تعسر عليك إجراء أي عملية تقنية، يرجى التواصل مع المهندس المطور: <span className="font-black underline decoration-brand-cyan underline-offset-4" dir="ltr">0096340392619</span>
+                   </p>
+               </div>
             </div>
           </motion.div>
         )}
@@ -276,6 +348,87 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                        </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Financial Insights Chart */}
+                <div ref={chartRef} className="bg-white p-8 rounded-[3rem] border border-slate-100 shadow-sm mb-10 overflow-hidden">
+                  <div className="flex items-center justify-between mb-8">
+                     <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-brand-navy flex items-center justify-center text-brand-cyan">
+                           <TrendingUp size={24} />
+                        </div>
+                        <div>
+                           <h3 className="text-xl font-black text-brand-navy tracking-tighter">حجم الطلبات اليومي</h3>
+                           <p className="text-[10px] font-black text-brand-green uppercase tracking-widest mt-0.5">تحليل النشاط الأسبوعي</p>
+                        </div>
+                     </div>
+                     <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-3 px-4 py-2 bg-slate-50 rounded-xl border border-slate-100 text-[10px] font-black text-slate-400">
+                           <Calendar size={14} className="text-brand-navy" />
+                           <span>الأسبوع الحالي</span>
+                        </div>
+                        <button 
+                          onClick={handleDownloadPDF}
+                          className="flex items-center gap-3 px-4 py-2 bg-brand-navy text-brand-cyan rounded-xl border border-brand-navy/10 text-[10px] font-black hover:bg-brand-green hover:text-white transition-all shadow-lg"
+                        >
+                          <Printer size={14} />
+                          <span>تصدير PDF</span>
+                        </button>
+                     </div>
+                  </div>
+
+                  <div className="h-[300px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={weeklyChartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                        <defs>
+                          <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor="#0F172A" />
+                            <stop offset="100%" stopColor="#2DD4BF" />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
+                        <XAxis 
+                          dataKey="dayName" 
+                          axisLine={false} 
+                          tickLine={false} 
+                          tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 900 }}
+                          dy={10} 
+                        />
+                        <YAxis 
+                          axisLine={false} 
+                          tickLine={false} 
+                          tick={{ fill: '#94A3B8', fontSize: 10, fontWeight: 900 }}
+                        />
+                        <Tooltip 
+                          cursor={{ fill: '#F8FAFC' }}
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              return (
+                                <div className="bg-brand-navy p-4 rounded-2xl border border-slate-800 shadow-2xl">
+                                  <p className="text-[10px] font-black text-brand-cyan uppercase tracking-widest mb-1">{payload[0].payload.dayName}</p>
+                                  <p className="text-lg font-black text-white">{payload[0].value} طلب مالي</p>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+                        <Bar 
+                          dataKey="count" 
+                          radius={[10, 10, 10, 10]} 
+                          barSize={40}
+                        >
+                          {weeklyChartData.map((entry, index) => (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill="url(#barGradient)" 
+                              fillOpacity={entry.count > 0 ? 1 : 0.1}
+                            />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

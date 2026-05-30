@@ -133,10 +133,12 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ isOpen, onClos
               <div className="md:col-span-2 space-y-2">
                 <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">الاسم الكامل</label>
                 <input type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full bg-slate-50 border-transparent rounded-[1.5rem] p-4 font-bold text-sm focus:bg-white focus:ring-4 focus:ring-brand-cyan/5 transition-all outline-none" placeholder="Enter Full Legal Name" />
+                <p className="text-[9px] text-slate-300 font-bold px-2 italic">يجب أن يطابق الاسم الوارد في الهوية الرسمية أو جواز السفر.</p>
               </div>
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">رقم جواز السفر</label>
                 <input type="text" value={formData.passportNumber} onChange={e => setFormData({...formData, passportNumber: e.target.value})} className="w-full bg-slate-50 border-transparent rounded-[1.5rem] p-4 font-bold text-sm focus:bg-white focus:ring-4 focus:ring-brand-cyan/5 transition-all outline-none" placeholder="Passport No." />
+                <p className="text-[9px] text-slate-300 font-bold px-2 italic">ضروري لإتمام إجراءات الحجز الفندقي والطيران الدولي.</p>
               </div>
 
               <div className="space-y-2">
@@ -211,6 +213,7 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = ({ isOpen, onClos
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase text-slate-400 mr-2 tracking-widest">التشخيص المبدئي</label>
               <textarea value={formData.condition} onChange={e => setFormData({...formData, condition: e.target.value})} className="w-full bg-slate-50 border-transparent rounded-[1.5rem] p-6 font-bold text-sm focus:bg-white outline-none transition-all min-h-[120px]" placeholder="Detailed Medical diagnosis and patient history summary..." />
+              <p className="text-[9px] text-slate-300 font-bold px-2 italic">يرجى تقديم ملخص دقيق للحالة الطبية للمساعدة في ترشيح أفضل كادر طبي مختص.</p>
             </div>
           </section>
 

@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, User, MapPin, Calendar, Activity, 
   FileText, Globe, Phone, Mail, Award, 
   Hospital, Stethoscope, Hotel, Plane, 
   ShieldCheck, FileDown, Plus, ExternalLink,
-  ChevronRight, ClipboardList, CreditCard
+  ChevronRight, ClipboardList, CreditCard, Trash2,
+  Clock
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Patient, MedicalProgram, PartnerHospital, Doctor, Hotel as HotelType } from '../../types';
+import { LocalStorageManager, MELENT_KEYS } from '../../services/localStorageManager';
+
+interface QuickNote {
+  id: string;
+  text: string;
+  timestamp: string;
+}
 
 interface PatientProfileProps {
   patient: Patient;
@@ -26,6 +34,41 @@ export const PatientProfile: React.FC<PatientProfileProps> = ({
   doctor,
   hotel
 }) => {
+  const [quickNotes, setQuickNotes] = useState<QuickNote[]>([]);
+  const [newNote, setNewNote] = useState('');
+
+  // Load notes
+  useEffect(() => {
+    const allNotes = LocalStorageManager.get(MELENT_KEYS.PATIENT_QUICK_NOTES) || {};
+    setQuickNotes(allNotes[patient.id] || []);
+  }, [patient.id]);
+
+  // Save notes helper
+  const saveNotes = (updatedNotes: QuickNote[]) => {
+    const allNotes = LocalStorageManager.get(MELENT_KEYS.PATIENT_QUICK_NOTES) || {};
+    allNotes[patient.id] = updatedNotes;
+    LocalStorageManager.save(MELENT_KEYS.PATIENT_QUICK_NOTES, allNotes);
+    setQuickNotes(updatedNotes);
+  };
+
+  const handleAddNote = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newNote.trim()) return;
+
+    const note: QuickNote = {
+      id: Math.random().toString(36).substr(2, 9),
+      text: newNote,
+      timestamp: new Date().toISOString()
+    };
+
+    saveNotes([note, ...quickNotes]);
+    setNewNote('');
+  };
+
+  const handleDeleteNote = (noteId: string) => {
+    saveNotes(quickNotes.filter(n => n.id !== noteId));
+  };
+
   return (
     <motion.div 
       initial={{ opacity: 0, x: 20 }} 
@@ -67,11 +110,11 @@ export const PatientProfile: React.FC<PatientProfileProps> = ({
 
           <div className="flex gap-3">
              <button className="px-6 py-3 bg-white/10 hover:bg-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-2 border border-white/10">
-               <FileDown size={16} />
-               Export Dossier
+                <FileDown size={16} />
+                Export Dossier
              </button>
              <button onClick={onClose} className="w-12 h-12 bg-white text-brand-navy rounded-2xl flex items-center justify-center hover:bg-brand-cyan transition-all shadow-xl">
-               <X size={20} />
+                <X size={20} />
              </button>
           </div>
         </div>
@@ -237,6 +280,65 @@ export const PatientProfile: React.FC<PatientProfileProps> = ({
             </button>
           </section>
 
+          {/* Quick Notes Section */}
+          <section className="bg-slate-50 p-8 rounded-[3rem] border border-slate-100 space-y-6">
+            <div className="flex items-center justify-between">
+              <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-[0.2em]">Quick Notes</h4>
+              <div className="w-7 h-7 bg-brand-cyan/20 rounded-full flex items-center justify-center text-brand-cyan">
+                <FileText size={14} />
+              </div>
+            </div>
+
+            <form onSubmit={handleAddNote} className="relative">
+              <input 
+                type="text" 
+                value={newNote}
+                onChange={e => setNewNote(e.target.value)}
+                placeholder="Operational reminder..."
+                className="w-full bg-white border border-slate-200 rounded-2xl p-4 pr-12 text-xs font-bold outline-none focus:border-brand-cyan transition-all"
+              />
+              <button 
+                type="submit"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-brand-navy text-white rounded-xl flex items-center justify-center hover:bg-brand-cyan transition-all"
+              >
+                <Plus size={16} />
+              </button>
+            </form>
+
+            <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
+              <AnimatePresence initial={false}>
+                {quickNotes.map((note) => (
+                  <motion.div 
+                    key={note.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="group bg-white p-4 rounded-2xl border border-slate-100 shadow-sm relative"
+                  >
+                    <button 
+                      onClick={() => handleDeleteNote(note.id)}
+                      className="absolute top-2 left-2 p-1 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                    <p className="text-[11px] font-bold text-brand-navy leading-relaxed mb-2 pl-4">
+                      {note.text}
+                    </p>
+                    <div className="flex items-center gap-1.5 text-[8px] font-black text-slate-300 uppercase tracking-widest">
+                       <Clock size={10} />
+                       <span>{new Date(note.timestamp).toLocaleString()}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              {quickNotes.length === 0 && (
+                <div className="py-6 text-center">
+                   <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em]">No operational notes</p>
+                </div>
+              )}
+            </div>
+          </section>
+
           {/* Financial Posture */}
           <section className="bg-brand-navy/5 p-8 rounded-[3rem] border border-blue-100/30 space-y-6">
             <div className="flex items-center justify-between mb-4">
@@ -287,3 +389,4 @@ export const PatientProfile: React.FC<PatientProfileProps> = ({
     </motion.div>
   );
 };
+

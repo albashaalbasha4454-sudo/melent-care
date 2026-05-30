@@ -50,7 +50,10 @@ export const LogisticsSection: React.FC = () => {
               تتبع الشحنات الدولية والمحلية، إدارة التخليص الجمركي، ومراقبة حركة المخزون بين المسارات المختلفة. جميع البيانات مشفرة محلياً.
             </p>
           </div>
-          <button className="bg-white text-brand-navy px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-green hover:text-white transition-all shadow-xl shadow-white/5">
+          <button 
+            onClick={() => alert('تمت مزامنة المسارات اللوجستية وتحديث حالة الشحنات النشطة.')}
+            className="bg-white text-brand-navy px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-brand-green hover:text-white transition-all shadow-xl shadow-white/5"
+          >
             تحديث المسار
           </button>
         </div>

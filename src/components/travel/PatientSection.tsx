@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Plus, MapPin, Calendar, FileText, FileDown, ArrowRight } from 'lucide-react';
+import { Users, Plus, MapPin, Calendar, FileText, FileDown, ArrowRight, ChevronRight } from 'lucide-react';
 import { DataTable } from '../DataTable';
 import { LocalStorageManager, MELENT_KEYS } from '../../services/localStorageManager';
 import { Patient, PartnerHospital, MedicalProgram, Doctor, Hotel } from '../../types';
@@ -105,13 +105,13 @@ export const PatientSection: React.FC = () => {
     const assignedHotel = hotels.find(h => h.id === selectedPatient.assignedHotelId);
 
     return (
-      <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+      <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500" dir="rtl">
          <button 
           onClick={() => setSelectedPatient(null)}
           className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-brand-navy transition-all mb-4"
          >
-           <ArrowRight size={14} />
-           Back to Command List
+           <ChevronRight size={14} />
+           العودة إلى قائمة المرضى
          </button>
          <PatientProfile 
             patient={selectedPatient} 
@@ -126,20 +126,20 @@ export const PatientSection: React.FC = () => {
   }
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <Users className="text-brand-green" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Patient Command Center</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">مركز قيادة المرضى</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Global Medical Case & Lead Orchestration</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">تنسيق الحالات الطبية العالمية وإدارة العملاء المحتملين</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
             onClick={handleExport}
             className="p-4 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand-navy shadow-sm transition-all hover:shadow-md"
-            title="Export Strategic Data"
+            title="تصدير البيانات الاستراتيجية"
           >
             <FileDown size={20} />
           </button>
@@ -148,7 +148,7 @@ export const PatientSection: React.FC = () => {
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Establish New Lead
+            إنشاء ملف مريض جديد
           </button>
         </div>
       </div>

@@ -86,28 +86,53 @@ export const FlightSection: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <Plane className="text-cyan-500" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Flight Logistics Command</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">قيادة اللوجستيات الجوية</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Global Air Mobility & Patient Manifest Management</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">إدارة الحركة الجوية العالمية وبيان ركاب المرضى</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
             onClick={handleExport}
             className="p-4 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-brand-navy shadow-sm transition-all hover:shadow-md"
-            title="Export Manifest"
+            title="تصدير البيان"
           >
             <FileDown size={20} />
           </button>
           <button 
+            onClick={() => {
+              const pnr = prompt('أدخل رمز PNR للرحلة الجديدة:');
+              if (pnr) {
+                const newFlight: FlightReservation = {
+                  id: 'flt' + Date.now(),
+                  patientId: patients[0]?.id || '',
+                  patientName: patients[0]?.name || 'Unknown Patient',
+                  airline: 'Turkish Airlines',
+                  flightNumber: 'TK' + Math.floor(1000 + Math.random() * 9000),
+                  origin: 'IST',
+                  destination: 'RUH',
+                  departureCity: 'اسطنبول',
+                  arrivalCity: 'الرياض',
+                  departureDate: new Date().toISOString().split('T')[0],
+                  departureTime: '10:00 AM',
+                  arrivalTime: '14:00 PM',
+                  pnr,
+                  pnrStatus: 'Confirmed',
+                  status: 'Booked'
+                };
+                const updated = [...flights, newFlight];
+                setFlights(updated);
+                LocalStorageManager.save(MELENT_KEYS.TRAVEL_FLIGHTS, updated);
+              }
+            }}
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Establish Flight Plan
+            إنشاء خطة رحلة
           </button>
         </div>
       </div>
@@ -131,18 +156,18 @@ export const FlightSection: React.FC = () => {
                  <Plane size={32} />
                </div>
                <div>
-                  <p className="text-[10px] font-black text-brand-cyan uppercase tracking-[0.3em]">Operational Readiness</p>
-                  <p className="text-3xl font-black">All Flights Clear</p>
+                  <p className="text-[10px] font-black text-brand-cyan uppercase tracking-[0.3em]">الجاهزية التشغيلية</p>
+                  <p className="text-3xl font-black">كافة الرحلات منتظمة</p>
                </div>
             </div>
             <div className="mt-8 space-y-4 relative z-10">
                <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/10">
-                  <span className="text-[10px] font-black uppercase text-white/60">Active PNR Manifests</span>
+                  <span className="text-[10px] font-black uppercase text-white/60">بيانات PNR النشطة</span>
                   <span className="text-xl font-black">{flights.length}</span>
                </div>
                <div className="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/10">
-                  <span className="text-[10px] font-black uppercase text-white/60">Transit Node Status</span>
-                  <span className="text-xl font-black text-brand-green">Optimized</span>
+                  <span className="text-[10px] font-black uppercase text-white/60">حالة عقدة العبور</span>
+                  <span className="text-xl font-black text-brand-green">مثالية</span>
                </div>
             </div>
          </div>
@@ -150,19 +175,25 @@ export const FlightSection: React.FC = () => {
          <div className="bg-white rounded-[3.5rem] border border-slate-100 p-10 space-y-8 shadow-sm">
             <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-widest flex items-center gap-3">
                <AlertTriangle className="text-brand-gold" size={18} />
-               Logistics Safety Standards
+               معايير سلامة اللوجستيات
             </h4>
             <div className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-100">
                <p className="text-xs font-bold text-slate-500 leading-relaxed">
-                  Every patient flight must be verified against current medical clearance. Patients requiring oxygen or specialized mobility assistance must have their PNR flagged for "WCHR" or "WCHS" support at least 48 hours before departure.
+                 يجب التحقق من كل رحلة مريض مقابل التصريح الطبي الحالي. يجب تمييز المرضى الذين يحتاجون إلى أكسجين أو مساعدة تنقل متخصصة في رمز PNR بطلب "WCHR" أو "WCHS" قبل 48 ساعة على الأقل من المغادرة.
                </p>
             </div>
             <div className="flex gap-4">
-               <button className="flex-1 py-4 bg-brand-navy text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-green transition-all shadow-xl shadow-brand-navy/10">
-                  Audit Medical Clearance
+               <button 
+                onClick={() => alert('بدأ تدقيق التصاريح الطبية...')}
+                className="flex-1 py-4 bg-brand-navy text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-brand-green transition-all shadow-xl shadow-brand-navy/10"
+               >
+                  تدقيق التصاريح الطبية
                </button>
-               <button className="flex-1 py-4 bg-white border border-slate-200 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all">
-                  Ground Ops Sync
+               <button 
+                onClick={() => alert('مزامنة العمليات الأرضية...')}
+                className="flex-1 py-4 bg-white border border-slate-200 text-slate-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all"
+               >
+                  مزامنة العمليات الأرضية
                </button>
             </div>
          </div>

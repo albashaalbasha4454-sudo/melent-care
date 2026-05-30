@@ -33,11 +33,18 @@ export const ContractSection: React.FC = () => {
       </span>
     )},
     { header: 'الإجراءات', accessor: (c: any) => (
-      <button className="p-2 bg-slate-50 text-slate-400 rounded-lg hover:text-brand-navy">
+      <button 
+        onClick={() => alert(`بدأ تحميل العقد المالي: ${c.id}`)}
+        className="p-2 bg-slate-50 text-slate-400 rounded-lg hover:text-brand-navy"
+      >
         <Download size={14} />
       </button>
     )}
   ];
+
+  const handleAddContract = () => {
+    alert('بدأ إنشاء عقد قانوني جديد. سيتم توجيهك لنظام صياغة العقود...');
+  };
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -46,7 +53,10 @@ export const ContractSection: React.FC = () => {
           <h2 className="text-2xl font-black text-brand-navy tracking-tighter uppercase">إدارة العقود القانونية</h2>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">توثيق وأرشفة محلية للاتفاقيات</p>
         </div>
-        <button className="bg-brand-navy text-white px-6 py-3 rounded-2xl flex items-center gap-3 font-bold text-sm shadow-xl shadow-brand-navy/10">
+        <button 
+          onClick={handleAddContract}
+          className="bg-brand-navy text-white px-6 py-3 rounded-2xl flex items-center gap-3 font-bold text-sm shadow-xl shadow-brand-navy/10 hover:bg-brand-green transition-all"
+        >
           <Plus size={18} className="text-brand-cyan" />
           عقد جديد
         </button>

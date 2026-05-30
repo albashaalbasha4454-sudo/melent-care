@@ -79,14 +79,14 @@ export const HotelSection: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in duration-500">
+    <div className="space-y-10 animate-in fade-in duration-500" dir="rtl">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
            <div className="flex items-center gap-3 mb-2">
               <HotelIcon className="text-amber-500" size={24} />
-              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">Hospitality Roster</h2>
+              <h2 className="text-3xl font-black text-brand-navy tracking-tight uppercase">قائمة الشركاء الفندقيين</h2>
            </div>
-           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Premium Recovery & Accommodation Logistics</p>
+           <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">إدارة السكن الفاخر واللوجستيات الاستشفائية</p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <button 
@@ -96,10 +96,30 @@ export const HotelSection: React.FC = () => {
             <FileDown size={20} />
           </button>
           <button 
+            onClick={() => {
+              const name = prompt('أدخل اسم الفندق الجديد:');
+              if (name) {
+                const newHotel: Hotel = {
+                  id: 'htl' + Date.now(),
+                  name,
+                  location: 'تركيا، اسطنبول',
+                  stars: 5,
+                  roomTypes: ['Standard', 'Luxury Suite'],
+                  basePricePerNight: 150,
+                  pricePerNight: 150,
+                  contractStatus: 'Active',
+                  amenities: ['Spa', 'Halal Food', 'Accessible'],
+                  contact: 'info@' + name.toLowerCase().replace(/ /g, '') + '.com'
+                };
+                const updated = [...hotels, newHotel];
+                setHotels(updated);
+                LocalStorageManager.save(MELENT_KEYS.TRAVEL_HOTELS, updated);
+              }
+            }}
             className="bg-brand-navy text-white px-8 py-5 rounded-2xl font-black text-xs shadow-2xl shadow-brand-navy/30 hover:bg-brand-green transition-all flex items-center gap-4 group uppercase tracking-[0.2em]"
           >
             <Plus size={20} className="text-brand-cyan group-hover:rotate-90 transition-transform" />
-            Contract New Facility
+            التعاقد مع منشأة جديدة
           </button>
         </div>
       </div>
@@ -121,26 +141,29 @@ export const HotelSection: React.FC = () => {
                <Bed size={40} />
             </div>
             <div>
-               <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-widest mb-2">Recovery Standard Compliance</h4>
+               <h4 className="text-[11px] font-black text-brand-navy uppercase tracking-widest mb-2">معايير الامتثال اللوجستية</h4>
                <p className="text-xs font-bold text-slate-500 leading-relaxed max-w-lg">
-                 All Melent-partnered hotels must provide wheelchair-accessible rooms, 24/7 room service, and specialized diet options for postoperative patients.
+                 يجب أن توفر جميع الفنادق الشريكة لميلنت غرفاً مجهزة لذوي الاحتياجات الخاصة، وخدمة الغرف على مدار الساعة، وخيارات غذائية متخصصة لمرضى ما بعد الجراحة.
                </p>
             </div>
          </div>
          <div className="bg-brand-navy p-8 rounded-[3rem] text-white flex flex-col justify-between relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-cyan/20 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000" />
             <div className="relative z-10 flex items-center justify-between">
-               <span className="text-[10px] font-black uppercase text-brand-cyan tracking-widest">Global Inventory</span>
+               <span className="text-[10px] font-black uppercase text-brand-cyan tracking-widest">المخزون العالمي</span>
                <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center">
                   <Star size={14} className="text-brand-gold" fill="currentColor" />
                </div>
             </div>
             <div className="relative z-10 mt-6">
-               <p className="text-4xl font-black tracking-tighter">482</p>
-               <p className="text-[10px] font-black uppercase tracking-widest mt-1 opacity-60">Reserved Rooms Weekly</p>
+               <p className="text-4xl font-black tracking-tighter">{hotels.length * 45}</p>
+               <p className="text-[10px] font-black uppercase tracking-widest mt-1 opacity-60">غرفة محجوزة أسبوعياً</p>
             </div>
-            <button className="mt-8 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all text-[9px] font-black uppercase tracking-[0.2em] relative z-10">
-               Audit Availability
+            <button 
+              onClick={() => alert('بدأ تدقيق توفر الغرف...')}
+              className="mt-8 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl transition-all text-[9px] font-black uppercase tracking-[0.2em] relative z-10"
+            >
+               تدقيق التوفر
             </button>
          </div>
       </div>

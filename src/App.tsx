@@ -5,6 +5,8 @@ import { TravelDashboard } from './components/TravelDashboard';
 import { AdminDashboard } from './components/AdminDashboard';
 import { motion, AnimatePresence } from 'motion/react';
 
+import { HelpFab } from './components/HelpFab';
+
 export default function App() {
   const [userRole, setUserRole] = useState<UserRole>(() => {
     return (localStorage.getItem('melent_role') as UserRole) || null;
@@ -54,6 +56,7 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <HelpFab />
     </div>
   );
 }
