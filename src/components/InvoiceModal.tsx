@@ -21,8 +21,8 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
     const data = order.items.map(item => ({
       'اسم المنتج': item.name,
       'الكمية': item.quantity,
-      'سعر الوحدة': item.price,
-      'الإجمالي': item.price * item.quantity
+      'سعر الوحدة': item.unitPrice,
+      'الإجمالي': item.unitPrice * item.quantity
     }));
 
     const ws = XLSX.utils.json_to_sheet(data);
@@ -87,7 +87,7 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                     <Logo className="w-20 h-20" />
                     <div>
                       <h1 className="text-3xl font-black text-brand-navy tracking-tight">فاتورة ضريبية</h1>
-                      <p className="text-[10px] text-brand-green font-black uppercase tracking-[0.3em] mt-1">Tax Invoice • Melent Care</p>
+                      <p className="text-[10px] text-brand-green font-black uppercase tracking-[0.3em] mt-1">Tax Invoice • The Bridge Between Health, Tourism and Trade</p>
                     </div>
                   </div>
                   <div className="text-right md:text-left">
@@ -119,13 +119,13 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                         <span className="text-[9px] font-black uppercase px-2 py-1 bg-slate-50 border border-slate-100 rounded-lg text-slate-400">
                           ID: {order.clientId}
                         </span>
-                        {order.isTurkeyBased && (
+                        {order.executionLocation === 'Turkey' && (
                           <span className="text-[9px] font-black uppercase px-2 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-lg text-brand-gold">
                              Turkey Origin
                           </span>
                         )}
                         <span className="text-[9px] font-black uppercase px-2 py-1 bg-brand-navy/5 border border-brand-navy/10 rounded-lg text-brand-navy">
-                          {order.paymentMethod}
+                          {order.payment.method}
                         </span>
                       </div>
                     </div>
@@ -138,14 +138,14 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                       <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-brand-navy shadow-sm"><Printer size={18} /></div>
                       <div>
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">اللوجستيات / Delivery</p>
-                        <p className="text-xs font-black text-brand-navy uppercase">{order.deliveryMethod}</p>
+                        <p className="text-xs font-black text-brand-navy uppercase">{order.shipping.method}</p>
                       </div>
                    </div>
                    <div className="flex items-center gap-3 px-6 py-4 bg-slate-50/50 rounded-2xl border border-slate-100 flex-1 min-w-[200px]">
                       <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-brand-cyan shadow-sm"><Download size={18} /></div>
                       <div>
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">طريقة الدفع / Payment</p>
-                        <p className="text-xs font-black text-brand-navy uppercase">{order.paymentMethod}</p>
+                        <p className="text-xs font-black text-brand-navy uppercase">{order.payment.method}</p>
                       </div>
                    </div>
                 </div>
@@ -168,8 +168,8 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                             <p className="font-bold text-slate-900 group-hover:text-brand-navy transition-colors">{item.name}</p>
                           </td>
                           <td className="px-6 py-5 text-center font-bold text-slate-500">{item.quantity}</td>
-                          <td className="px-6 py-5 text-center font-bold text-slate-500">{item.price.toLocaleString()} $</td>
-                          <td className="px-6 py-5 text-left font-black text-brand-navy">{(item.price * item.quantity).toLocaleString()} $</td>
+                          <td className="px-6 py-5 text-center font-bold text-slate-500">{item.unitPrice.toLocaleString()} {order.financials?.currency || '$'}</td>
+                          <td className="px-6 py-5 text-left font-black text-brand-navy">{(item.unitPrice * item.quantity).toLocaleString()} {order.financials?.currency || '$'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -180,16 +180,36 @@ export const InvoiceModal = ({ order, isOpen, onClose }: InvoiceModalProps) => {
                 <div className="flex justify-end pt-6">
                   <div className="w-full md:w-80 space-y-4">
                     <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-400 font-bold uppercase tracking-widest">المجموع الفرعي</span>
-                      <span className="font-bold text-slate-700">{order.total.toLocaleString()} $</span>
+                      <span className="text-slate-400 font-bold uppercase tracking-widest">المجموع الفرعي (Items)</span>
+                      <span className="font-bold text-slate-700">{(order.financials?.subtotal || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
                     </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-400 font-bold uppercase tracking-widest">الضريبة (0%)</span>
-                      <span className="font-bold text-slate-700">0.00 $</span>
-                    </div>
+                    {((order.financials?.intlShippingFee || 0) > 0 || (order.financials?.localDeliveryFee || 0) > 0) && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-slate-400 font-bold uppercase tracking-widest">الشحن واللوجستيات</span>
+                        <span className="font-bold text-slate-700">+{((order.financials?.intlShippingFee || 0) + (order.financials?.localDeliveryFee || 0)).toLocaleString()} {order.financials?.currency || '$'}</span>
+                      </div>
+                    )}
+                    {(order.financials?.serviceFee || 0) > 0 && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-slate-400 font-bold uppercase tracking-widest">رسوم الخدمات</span>
+                        <span className="font-bold text-slate-700">+{(order.financials?.serviceFee || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
+                      </div>
+                    )}
+                    {(order.financials?.tax || 0) > 0 && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-slate-400 font-bold uppercase tracking-widest">الضريبة</span>
+                        <span className="font-bold text-slate-700">+{(order.financials?.tax || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
+                      </div>
+                    )}
+                    {(order.financials?.discount || 0) > 0 && (
+                      <div className="flex justify-between items-center text-sm text-brand-green">
+                        <span className="font-bold uppercase tracking-widest">خصم خاص</span>
+                        <span className="font-bold">-{(order.financials?.discount || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
+                      </div>
+                    )}
                     <div className="pt-4 border-t-2 border-slate-900 flex justify-between items-center">
                       <span className="text-lg font-black text-brand-navy uppercase tracking-widest">الإجمالي النهائي</span>
-                      <span className="text-2xl font-black text-brand-navy">{order.total.toLocaleString()} $</span>
+                      <span className="text-2xl font-black text-brand-navy">{(order.financials?.total || 0).toLocaleString()} {order.financials?.currency || '$'}</span>
                     </div>
                   </div>
                 </div>

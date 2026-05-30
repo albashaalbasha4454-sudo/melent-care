@@ -1,44 +1,20 @@
-# MELENT CARE
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Professional web application for MELENT CARE.
+# Run and deploy your AI Studio app
 
-This repository is dedicated to the company website / application interface only. It is not related to the exhibition booth, carpentry drawings, printing files, or booth execution package.
+This contains everything you need to run your app locally.
 
-## Tech Stack
+View your app in AI Studio: https://ai.studio/apps/c8019b3b-8368-46ae-996a-5c6036f42c78
 
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
+## Run Locally
 
-## Local Development
+**Prerequisites:**  Node.js
 
-```bash
-npm install
-npm run dev
-```
 
-## Production Build
-
-```bash
-npm install
-npm run build
-```
-
-The production output folder is:
-
-```txt
-dist
-```
-
-## Deployment Settings
-
-Use the following settings on Vercel, Netlify, or any static hosting platform:
-
-- Framework: Vite
-- Install Command: npm install
-- Build Command: npm run build
-- Output Directory: dist
-- Node Version: 20
-
-Do not use Webpack for this project. If the platform asks to install `webpack-cli`, the build command is incorrect and must be changed to `npm run build`.
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
