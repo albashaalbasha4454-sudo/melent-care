@@ -16,5 +16,4 @@ export type ReportOptions = {
 
 const formatDate = () => new Date().toISOString().slice(0, 10);
 
-const safeFileName = (value: string) =>
-  value.trim().replace(/[^a-zA-Z0-9\u
+const safeFileName = (value: string
